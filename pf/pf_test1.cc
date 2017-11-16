@@ -22,7 +22,7 @@ using namespace std;
 // place the initializer and then the final call to printout the statistics
 // once main has finished
 #ifdef PF_STATS
-#include "statistics.h"
+#include "../utils/statistics.h"
 
 // This is defined within pf_buffermgr.cc
 extern StatisticsMgr *pStatisticsMgr;

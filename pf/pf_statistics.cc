@@ -14,7 +14,7 @@
 
 #include <iostream>
 #include "pf.h"
-#include "statistics.h"
+#include "../utils/statistics.h"
 
 using namespace std;
 

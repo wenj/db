@@ -18,9 +18,9 @@
 // declarations in any other file).
 
 // Do not change the following includes
-#include "redbase.h"
+#include "../pf/redbase.h"
 #include "rm_rid.h"
-#include "pf.h"
+#include "../pf/pf.h"
 
 //
 // RM_Record: RM Record interface

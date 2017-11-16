@@ -21,8 +21,8 @@
 #include <unistd.h>
 #include <cstdlib>
 
-#include "redbase.h"
-#include "pf.h"
+#include "../pf/redbase.h"
+#include "../pf/pf.h"
 #include "rm.h"
 
 using namespace std;
