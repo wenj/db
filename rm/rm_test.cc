@@ -83,10 +83,10 @@ RC GetNextRecScan(RM_FileScan &fs, RM_Record &rec);
 //
 // Array of pointers to the test functions
 //
-#define NUM_TESTS       2               // number of tests
+#define NUM_TESTS       2             // number of tests
 int (*tests[])() =                      // RC doesn't work on some compilers
 {
-    Test1,
+	Test1,
     Test2
 };
 
@@ -112,7 +112,6 @@ int main(int argc, char *argv[])
     if (argc == 1) {
         for (testNum = 0; testNum < NUM_TESTS; testNum++)
             if ((rc = (tests[testNum])())) {
-
                 // Print the error and exit
                 PrintError(rc);
                 return (1);
@@ -367,6 +366,7 @@ RC PrintFile(RM_FileScan &fs)
 //
 RC CreateFile(char *fileName, int recordSize)
 {
+	cout << "SegDebug>>1" << endl;
     printf("\ncreating %s\n", fileName);
     return (rmm.CreateFile(fileName, recordSize));
 }
@@ -457,7 +457,7 @@ RC Test1(void)
     RC            rc;
     RM_FileHandle fh;
 
-    printf("test1 starting ****************\n");
+    cout << "test1 starting ****************\n";
 
     if ((rc = CreateFile(FILENAME, sizeof(TestRec))) ||
         (rc = OpenFile(FILENAME, fh)) ||
@@ -465,11 +465,12 @@ RC Test1(void)
         return (rc);
 
     LsFile(FILENAME);
+	cout << " " << endl;
 
     if ((rc = DestroyFile(FILENAME)))
         return (rc);
-
-    printf("\ntest1 done ********************\n");
+	cout << " " << endl;
+    cout << "\ntest1 done ********************\n";
     return (0);
 }
 
@@ -480,20 +481,21 @@ RC Test2(void)
 {
     RC            rc;
     RM_FileHandle fh;
-
     printf("test2 starting ****************\n");
+	cout << " " << endl;
 
     if ((rc = CreateFile(FILENAME, sizeof(TestRec))) ||
-        (rc = OpenFile(FILENAME, fh)) ||
-        (rc = AddRecs(fh, FEW_RECS)) ||
-        (rc = CloseFile(FILENAME, fh)))
+        (rc = OpenFile(FILENAME, fh))// ||
+        //(rc = AddRecs(fh, FEW_RECS)) ||
+        //(rc = CloseFile(FILENAME, fh)))
+		)
         return (rc);
 
     LsFile(FILENAME);
 
     if ((rc = DestroyFile(FILENAME)))
         return (rc);
-
+	cout << " " << endl;
     printf("\ntest2 done ********************\n");
     return (0);
 }

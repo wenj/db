@@ -12,6 +12,8 @@
 
 #include "../pf/redbase.h"
 
+#define RM_NULLRID (START_RM_ERR - 2) // Moves it from rm.h.
+
 //
 // PageNum: uniquely identifies a page in a file
 //
@@ -26,6 +28,12 @@ typedef int SlotNum;
 // RID: Record id interface
 //
 class RID {
+private:
+	static const int NULL_PAGE = -1;
+	static const int NULL_SLOT = -1;
+
+	int pageNum, slotNum;
+
 public:
     RID();                                         // Default constructor
     RID(PageNum pageNum, SlotNum slotNum);
@@ -33,8 +41,6 @@ public:
 
     RC GetPageNum(PageNum &pageNum) const;         // Return page number
     RC GetSlotNum(SlotNum &slotNum) const;         // Return slot number
-
-private:
 };
 
 #endif
