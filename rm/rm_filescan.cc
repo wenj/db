@@ -119,7 +119,7 @@ RC RM_FileScan::OpenScan (const RM_FileHandle &fileHandle, AttrType attrType, in
 }
 
 RC RM_FileScan::GetNextRec(RM_Record &rec) {
-	if (hasAttachedFile) {
+	if (!hasAttachedFile) {
 		return RM_SCANNOTOPEN;
 	}
 
@@ -143,7 +143,7 @@ RC RM_FileScan::GetNextRec(RM_Record &rec) {
 }
 
 RC RM_FileScan::CloseScan () {
-	if (hasAttachedFile) {
+	if (!hasAttachedFile) {
 		return RM_SCANNOTOPEN;
 	}
 	hasAttachedFile = false;

@@ -74,6 +74,7 @@ RC RM_Manager::OpenFile(const char *fileName, RM_FileHandle &fileHandle) {
 	return 0;
 }
 
+ // TODO:把FileHandle改为File Header在最后关闭文件时再更新保存
 RC RM_Manager::CloseFile(RM_FileHandle &fileHandle) {
 	int rc;
 	rc = pfm.CloseFile(fileHandle.pffh);

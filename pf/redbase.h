@@ -1,15 +1,6 @@
-//
-// redbase.h
-//   global declarations
-//
 #ifndef REDBASE_H
 #define REDBASE_H
 
-// Please DO NOT include any other files in this file.
-
-//
-// Globally-useful defines
-//
 #define MAXNAME       24                // maximum length of a relation
                                         // or attribute name
 #define MAXSTRINGLEN  255               // maximum length of a
@@ -20,9 +11,7 @@
 #define yywrap() 1
 void yyerror(const char *);
 
-//
 // Return codes
-//
 typedef int RC;
 
 #define OK_RC         0    // OK_RC return code is guaranteed to always be 0
@@ -53,33 +42,25 @@ typedef int RC;
 // and PF layers
 const int ALL_PAGES = -1;
 
-//
 // Attribute types
-//
 enum AttrType {
     INT,
     FLOAT,
     STRING
 };
 
-//
 // Comparison operators
-//
 enum CompOp {
     NO_OP,                                      // no comparison
     EQ_OP, NE_OP, LT_OP, GT_OP, LE_OP, GE_OP    // binary atomic operators
 };
 
-//
 // Pin Strategy Hint
-//
 enum ClientHint {
     NO_HINT                                     // default value
 };
 
-//
 // TRUE, FALSE and BOOLEAN
-//
 #ifndef BOOLEAN
 typedef char Boolean;
 #endif

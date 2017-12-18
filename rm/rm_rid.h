@@ -41,6 +41,27 @@ public:
 
     RC GetPageNum(PageNum &pageNum) const;         // Return page number
     RC GetSlotNum(SlotNum &slotNum) const;         // Return slot number
+
+	bool operator<(const RID &t) const { 
+        int pageNumT, slotNumT;
+		t.GetPageNum(pageNumT);
+		t.GetSlotNum(slotNumT);
+		return (pageNum < pageNumT || (pageNum == pageNumT && slotNum < slotNumT));
+    }
+
+	bool operator==(const RID &t) const { 
+        int pageNumT, slotNumT;
+		t.GetPageNum(pageNumT);
+		t.GetSlotNum(slotNumT);
+		return (pageNum == pageNumT && slotNum == slotNumT);
+    }
+
+	bool operator!=(const RID &t) const { 
+        int pageNumT, slotNumT;
+		t.GetPageNum(pageNumT);
+		t.GetSlotNum(slotNumT);
+		return (pageNum != pageNumT || slotNum != slotNumT);
+    }
 };
 
 #endif

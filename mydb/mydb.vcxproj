@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{91FEB3F9-FD15-4C4A-ADE6-94D8DABDD188}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>mydb</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\ix\ix.h" />
+    <ClInclude Include="..\pf\pf.h" />
+    <ClInclude Include="..\pf\pf_buffermgr.h" />
+    <ClInclude Include="..\pf\pf_hashtable.h" />
+    <ClInclude Include="..\pf\pf_internal.h" />
+    <ClInclude Include="..\pf\redbase.h" />
+    <ClInclude Include="..\rm\rm.h" />
+    <ClInclude Include="..\rm\rm_internal.h" />
+    <ClInclude Include="..\rm\rm_rid.h" />
+    <ClInclude Include="..\smql\sm.h" />
+    <ClInclude Include="..\utils\bitmap.h" />
+    <ClInclude Include="..\utils\linkedlist.h" />
+    <ClInclude Include="..\utils\statistics.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\ix\ix_indexhandle.cc" />
+    <ClCompile Include="..\ix\ix_indexscan.cc" />
+    <ClCompile Include="..\ix\ix_manager.cc" />
+    <ClCompile Include="..\pf\pf_buffermgr.cc" />
+    <ClCompile Include="..\pf\pf_error.cc" />
+    <ClCompile Include="..\pf\pf_filehandle.cc" />
+    <ClCompile Include="..\pf\pf_hashtable.cc" />
+    <ClCompile Include="..\pf\pf_manager.cc" />
+    <ClCompile Include="..\pf\pf_pagehandle.cc" />
+    <ClCompile Include="..\pf\pf_statistics.cc" />
+    <ClCompile Include="..\pf\pf_test1.cc" />
+    <ClCompile Include="..\pf\pf_test2.cc" />
+    <ClCompile Include="..\pf\pf_test3.cc" />
+    <ClCompile Include="..\rm\rm_error.cc" />
+    <ClCompile Include="..\rm\rm_filescan.cc" />
+    <ClCompile Include="..\rm\rm_filehandle.cc" />
+    <ClCompile Include="..\rm\rm_manager.cc" />
+    <ClCompile Include="..\rm\rm_record.cc" />
+    <ClCompile Include="..\rm\rm_rid.cc" />
+    <ClCompile Include="..\rm\rm_test.cc" />
+    <ClCompile Include="..\smql\scanhelp.c" />
+    <ClCompile Include="..\smql\sm_manager.cc" />
+    <ClCompile Include="..\utils\statistics.cc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\smql\parser.y" />
+    <None Include="..\smql\scan.l" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
