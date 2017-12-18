@@ -1,7 +1,7 @@
 #include <cstring>
 #define MAXCHAR		5000
 
-// ∏¥÷∆¥Æ
+// Â§çÂà∂‰∏≤
 static char *copy_string(char *s, int len)
 {
    char *copy = new char[len + 1];

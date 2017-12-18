@@ -83,7 +83,7 @@
 									yylval.ival = atoi(yytext);
 									return VALUE_INTEGER;
 								}
-¡¯[^¡¯]*¡¯							{
+â€™[^â€™]*â€™							{
 									yylval.sval = copy_string(yytext, yyleng);
 									return VALUE_STRING;
 								}

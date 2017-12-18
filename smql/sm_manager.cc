@@ -53,13 +53,13 @@ RC SM_Manager::CreateDb(const char *dbName) {
 	int rc;
 	mkdir((rootPath + dbName).c_str());
 
-	// ½¨Á¢Ò»ÕÅ¼ÇÂ¼ËùÓĞ¹ØÏµĞÅÏ¢µÄ±í£¬ÃûÎªdbattr
+	// å»ºç«‹ä¸€å¼ è®°å½•æ‰€æœ‰å…³ç³»ä¿¡æ¯çš„è¡¨ï¼Œåä¸ºdbattr
 	rc = rmManager.CreateFile((rootPath + dbName + "\\dbattr").c_str(), MAXNAME + sizeof(int) + MAXATTRS * (MAXNAME + sizeof(AttrType) + sizeof(int)));
 	if (rc < 0) {
 		return rc;
 	}
 
-	// ½¨Á¢Ò»ÕÅ¼ÇÂ¼ËùÓĞË÷ÒıĞÅÏ¢µÄ±í£¬ÃûÎªdbindex
+	// å»ºç«‹ä¸€å¼ è®°å½•æ‰€æœ‰ç´¢å¼•ä¿¡æ¯çš„è¡¨ï¼Œåä¸ºdbindex
 	rc = rmManager.CreateFile((rootPath + dbName + "\\dbindex").c_str(), MAXNAME);
 	if (rc < 0) {
 		return rc;
@@ -94,8 +94,8 @@ RC SM_Manager::UseDb(const char *dbName) {
 }
 
 RC SM_Manager::ShowDb(const char *dbName) {
-	// TODO ¼ì²é¸ÃÎÄ¼şÊÇ·ñÒÑ¾­´ò¿ª
-	// ÒÀ´ÎÊä³ödbattrÖĞµÄÃ¿¸öÎÄ¼şÃû
+	// TODO æ£€æŸ¥è¯¥æ–‡ä»¶æ˜¯å¦å·²ç»æ‰“å¼€
+	// ä¾æ¬¡è¾“å‡ºdbatträ¸­çš„æ¯ä¸ªæ–‡ä»¶å
 	int rc;
 	RM_FileHandle fileHandle;
 	rc = rmManager.OpenFile((curPath + dbName + "\\dbattr").c_str(), fileHandle);
@@ -160,7 +160,7 @@ RC SM_Manager::CreateTable(const char *relName, int attrCount, AttrInfo *attribu
 	if (rc < 0) {
 		return rc;
 	}
-	// ¹¹ÔìÒª²åÈëµ½dbattrÖĞµÄÊı¾İ
+	// æ„é€ è¦æ’å…¥åˆ°dbatträ¸­çš„æ•°æ®
 	char tableData[MAXNAME + sizeof(int) + MAXATTRS * (MAXNAME + sizeof(AttrType) + sizeof(int))];
 	memset(tableData, '\0', MAXNAME);
 	memcpy(tableData, relName, strlen(relName));
@@ -224,7 +224,7 @@ RC SM_Manager::ShowTable(const char *relName) {
 	}
 	RM_Record record;
 	rc = fileScan.GetNextRec(record);
-	// TODO:recordÖĞÊÇ¸Ã±íÔÚdbattrÖĞµÄ´æ´¢¼ÇÂ¼£¬È»ºó½ÓÏÂÀ´ÎÒ¸Ã¸ÉÉ¶£¿
+	// TODO:recordä¸­æ˜¯è¯¥è¡¨åœ¨dbatträ¸­çš„å­˜å‚¨è®°å½•ï¼Œç„¶åæ¥ä¸‹æ¥æˆ‘è¯¥å¹²å•¥ï¼Ÿ
 	fileScan.CloseScan();
 	return 0;
 }
@@ -238,7 +238,7 @@ RC SM_Manager::CreateIndex(const char *relName, const char *attrName) {
 	}
 	int rc;
 
-	// ÔÚdbindexÖĞ¼ÇÂ¼Ë÷Òı±í
+	// åœ¨dbindexä¸­è®°å½•ç´¢å¼•è¡¨
 	RM_FileScan fileScan;
 	char fullName[MAXNAME];
 	memset(fullName, '\0', MAXNAME);
@@ -279,15 +279,15 @@ RC SM_Manager::CreateIndex(const char *relName, const char *attrName) {
 		return SM_ATTRNAMENOTEXIST;
 	}
 	
-	// ´´½¨Ë÷ÒıÎÄ¼ş
+	// åˆ›å»ºç´¢å¼•æ–‡ä»¶
 	rc = ixManager.CreateIndex(relName, pos, attrInfos[pos].attrType, attrInfos[pos].attrLength);
 	if (rc < 0) {
 		return rc;
 	}
 
-	// ²åÈë±íÖĞÒÑ¾­´æÔÚµÄ¼ÇÂ¼
-	// ´ò¿ªtable£¬ÄÃµ½Ã¿Ò»Ìõ¼ÇÂ¼
-	// ´ò¿ªË÷Òı£¬²åÈëÃ¿Ò»Ìõ¼ÇÂ¼
+	// æ’å…¥è¡¨ä¸­å·²ç»å­˜åœ¨çš„è®°å½•
+	// æ‰“å¼€tableï¼Œæ‹¿åˆ°æ¯ä¸€æ¡è®°å½•
+	// æ‰“å¼€ç´¢å¼•ï¼Œæ’å…¥æ¯ä¸€æ¡è®°å½•
 	RM_FileHandle fileHandle;
 	rc = rmManager.OpenFile((curPath + relName).c_str(), fileHandle);
 	if (rc < 0) {
@@ -336,7 +336,7 @@ RC SM_Manager::DropIndex(const char *relName, const char *attrName) {
 	}
 	int rc;
 
-	// ÔÚdbindexÖĞÉ¾³ıË÷Òı±í
+	// åœ¨dbindexä¸­åˆ é™¤ç´¢å¼•è¡¨
 	RM_FileScan fileScan;
 	char fullName[MAXNAME];
 	memset(fullName, '\0', MAXNAME);
@@ -401,7 +401,7 @@ RC SM_Manager::DropIndex(const char *relName, const char *attrName) {
 		return SM_INDXNOTEXIST;
 	}
 
-	// É¾³ıË÷ÒıÎÄ¼ş
+	// åˆ é™¤ç´¢å¼•æ–‡ä»¶
 	rc = ixManager.DestroyIndex(relName, pos);
 	if (rc < 0) {
 		return rc;

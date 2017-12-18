@@ -5,6 +5,8 @@
 #include "../rm/rm.h"
 #include "../ix/ix.h"
 
+class AttrInfo;
+
 struct RelInfo {
 	char *relName;
 	int attrNum;
@@ -18,7 +20,7 @@ struct IndexInfo {
 
 // Used by SM_Manager::CreateTable
 struct AttrInfo {
-   char *attrName;           // ³¤¶È±ØÐëÎªMAXNAME
+   char *attrName;           // é•¿åº¦å¿…é¡»ä¸ºMAXNAME
    AttrType attrType;            // Type of attribute
    int attrLength;          // Length of attribute
 };
@@ -41,8 +43,8 @@ private:
 	bool hasAttachedDb;
 	IX_Manager ixManager;
 	RM_Manager rmManager;
-	RM_FileHandle indexHandle; // attachµ½dbindexÉÏ
-	RM_FileHandle attrHandle; // attachµ½dbattrÉÏ
+	RM_FileHandle indexHandle; // attachåˆ°dbindexä¸Š
+	RM_FileHandle attrHandle; // attachåˆ°dbatträ¸Š
 
 	bool HasDir(const std::string &path, const std::string &obj);
 	bool HasFile(const std::string &path, const std::string &obj);
