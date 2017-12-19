@@ -1,6 +1,7 @@
 #include "ix.h"
 #include <cstring>
 #include <string>
+#include <stdlib.h>
 
 IX_Manager::IX_Manager(PF_Manager &pfm) : pfm(pfm) {}
 IX_Manager::~IX_Manager() {}
@@ -8,7 +9,7 @@ IX_Manager::~IX_Manager() {}
 RC IX_Manager::CreateIndex(const char *fileName, int indexNo, AttrType attrType, int attrLength) {
 	int rc;
 
-	// 创建索引文件
+	// 鍒涘缓绱㈠紩鏂囦欢
 	std::string indexFileName(fileName);
 	indexFileName.append(".");
 	char buffer[MAXNAME];
@@ -19,7 +20,7 @@ RC IX_Manager::CreateIndex(const char *fileName, int indexNo, AttrType attrType,
 		return rc;
 	}
 
-	// 设置File Header
+	// 璁剧疆File Header
 	PF_FileHandle fileHandle;
 	rc = pfm.OpenFile(indexFileName.c_str(), fileHandle);
 	if (rc < 0) {
@@ -48,7 +49,7 @@ RC IX_Manager::CreateIndex(const char *fileName, int indexNo, AttrType attrType,
 RC IX_Manager::DestroyIndex(const char *fileName, int indexNo) {
 	int rc;
 
-	// 打开索引文件
+	// 鎵撳紑绱㈠紩鏂囦欢
 	std::string indexFileName(fileName);
 	indexFileName.append(".");
 	char buffer[MAXNAME];
@@ -64,7 +65,7 @@ RC IX_Manager::DestroyIndex(const char *fileName, int indexNo) {
 RC IX_Manager::OpenIndex(const char *fileName, int indexNo, IX_IndexHandle &indexHandle) {
 	int rc;
 
-	// 打开索引文件
+	// 鎵撳紑绱㈠紩鏂囦欢
 	std::string indexFileName(fileName);
 	indexFileName.append(".");
 	char buffer[MAXNAME];

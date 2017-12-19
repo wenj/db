@@ -1,5 +1,4 @@
 #include "sm.h"
-#include "stdafx.h"
 #include "direct.h"
 #include <io.h>
 #include <vector>

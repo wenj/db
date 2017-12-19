@@ -5,7 +5,12 @@
 #include "../rm/rm.h"
 #include "../ix/ix.h"
 
-class AttrInfo;
+// Used by SM_Manager::CreateTable
+struct AttrInfo {
+    char *attrName;           // 长度必须为MAXNAME
+    AttrType attrType;            // Type of attribute
+    int attrLength;          // Length of attribute
+};
 
 struct RelInfo {
 	char *relName;
@@ -16,13 +21,6 @@ struct RelInfo {
 struct IndexInfo {
 	char *relName;
 	AttrInfo indexInfo;
-};
-
-// Used by SM_Manager::CreateTable
-struct AttrInfo {
-   char *attrName;           // 长度必须为MAXNAME
-   AttrType attrType;            // Type of attribute
-   int attrLength;          // Length of attribute
 };
 
 // Used by Printer class

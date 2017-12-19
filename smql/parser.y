@@ -10,7 +10,7 @@
 %token DROP USE PRIMARY KEY NOT NULL
 %token INSERT INTO VALUES DELETE FROM WHERE
 %token UPDATE SET SELECT IS INT VARCHAR
-%token DESC INDEX AND DATE FLOAT DOREIGN
+%token DESC INDEX AND DATE FLOAT FOREIGN
 %token REFERENCES
 
 %%
@@ -78,49 +78,49 @@ Value : VALUE_INT
 	  | NULL
 	  ;
 
-WhereClause : Col Op Expr
-			| Col IS NOT NULL
-			| WhereClause AND WhereClause
-			;
+WhereClause     :   Col Op Expr
+			    |   Col IS NOT NULL
+			    |   WhereClause AND WhereClause
+			    ;
 
-Col : TbName '.' ColName
-	;
+Col             :   TbName '.' ColName
+	            ;
 
-Op : EQ
-   | NQ
-   | LT
-   | LE
-   | GT
-   | GE
-   ;
+Op              :   EQ
+                |   NQ
+                |   LT
+                |   LE
+                |   GT
+                |   GE
+                ;
 
-Expr : Value
-	 | Col
-	 ;
+Expr            :   Value
+	            |   Col
+	            ;
 
-SetClause : ColName EQ Value
-		  | SetClause ',' ColName EQ Value
-		  ;
+SetClause       :   ColName EQ Value
+		        |   SetClause ',' ColName EQ Value
+		        ;
 
 
-Selector : *
-		 | ColList
-		 ;
+Selector        :   '*'
+		        |   ColList
+		        ;
 
-ColList : Col
-		| ColList Col
-		;
+ColList         :   Col
+		        |   ColList Col
+		        ;
 
-TableList : TbName
-		  | TableList ',' TbName
-		  ;
+TableList       :   TbName
+		        |   TableList ',' TbName
+		        ;
 
-ColumnList : ColName
-		   | ColumnList ',' ColName
-		   ;
+ColumnList      :   ColName
+		        |   ColumnList ',' ColName
+		        ;
 
-DbName : IDENTIFIER
+DbName          :   IDENTIFIER
 
-TbName : IDENTIFIER
+TbName          :   IDENTIFIER
 
-ColName : IDENTIFIER
+ColName         :   IDENTIFIER

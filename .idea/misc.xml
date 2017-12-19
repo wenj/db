@@ -3,11 +3,15 @@
   <component name="CMakeWorkspace" PROJECT_DIR="$PROJECT_DIR$" />
   <component name="CidrRootsConfiguration">
     <sourceRoots>
+      <file path="$PROJECT_DIR$/include" />
       <file path="$PROJECT_DIR$/ix" />
       <file path="$PROJECT_DIR$/pf" />
       <file path="$PROJECT_DIR$/rm" />
       <file path="$PROJECT_DIR$/smql" />
       <file path="$PROJECT_DIR$/utils" />
     </sourceRoots>
+    <libraryRoots>
+      <file path="$PROJECT_DIR$/lib" />
+    </libraryRoots>
   </component>
 </project>
