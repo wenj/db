@@ -26,7 +26,7 @@ ADD_CUSTOM_COMMAND(
 )
 ADD_CUSTOM_COMMAND(
         OUTPUT ${YACCOutput}
-        COMMAND ${YACC_EXECUTABLE} ${YACCInput}
+        COMMAND ${YACC_EXECUTABLE} -d ${YACCInput}
         COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/rename_yacc
         COMMENT "Generating parser.cc"
 )
@@ -39,7 +39,7 @@ set(SOURCE_FILES main.cpp
             ${RM_DIR}/rm_record.cc ${RM_DIR}/rm_rid.cc
         ${IX_DIR}/ix_indexhandle.cc ${IX_DIR}/ix_indexscan.cc ${IX_DIR}/ix_manager.cc
         ${FlexOutput} ${YACCOutput}
-)
+        ${SMQL_DIR}/Tree.cpp)
 
 add_executable(mydb ${SOURCE_FILES})
 

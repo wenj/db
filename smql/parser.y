@@ -1,5 +1,13 @@
 %start Program
 
+%union{
+    int ival;
+    CompOp cval;
+    float rval;
+    char *sval;
+    Tree *n;
+}
+
 %token EQ
 %token NE
 %token LT
@@ -15,68 +23,69 @@
 
 %%
 
-Program :  /* empty */
-			{
-			}
-			| Program Stmt	
-			{
-			};
+Program         :   /* empty */
+			    {
+			    }
+			    |   Program Stmt
+			    {
+			    }
+			    ;
 
-Stmt : SysStmt ';'
-	 | DbStmt ';'
-	 | TbStmt ';'
-	 | IdxStmt ';'
-	 ;
+Stmt            :   SysStmt ';'
+	            |   DbStmt ';'
+	            |   TbStmt ';'
+	            |   IdxStmt ';'
+	            ;
 
-SysStmt : SHOW DATABASES
+SysStmt         :   SHOW DATABASES
 
-DbStmt : CREATE DATABASE DbName
-	   | DROP DATABASE DbName
-	   | USE DbName
-	   | SHOW TABLES	
-	   ;
+DbStmt          :   CREATE DATABASE DbName
+	            |   DROP DATABASE DbName
+	            |   USE DbName
+	            |   SHOW TABLES
+	            ;
 
-TbStmt : CREATE TABLE TbName '(' FieldList ')'
-       | DROP TABLE TbName
-	   | DESC TbName
-	   | INSERT INTO TbName VALUES ValueLists
-	   | DELETE FROM TbName WHERE WhereClause
-	   | UPDATE TbName SET SetClause WHERE WhereClause
-	   | SELECT Selector FROM TableList WHERE WhereClause
-	   ;
+TbStmt          :   CREATE TABLE TbName '(' FieldList ')'
+                |   DROP TABLE TbName
+	            |   DESC TbName
+	            |   INSERT INTO TbName VALUES ValueLists
+	            |   DELETE FROM TbName WHERE WhereClause
+	            |   UPDATE TbName SET SetClause WHERE WhereClause
+	            |   SELECT Selector FROM TableList WHERE WhereClause
+	            ;
 
-IdxStmt : CREATE INDEX TbName '(' ColName ')'
-        | DROP INDEX TbName '(' ColName ')'
-		;
+IdxStmt         :   CREATE INDEX TbName '(' ColName ')'
+                |   DROP INDEX TbName '(' ColName ')'
+		        ;
 
-FieldList : Field
-		  | FieldList ',' Field
-		  ;
+FieldList       :   Field
+		        |   FieldList ',' Field
+		        ;
 
-Field : ColName Type
-      | ColName Type NOT NULL
-	  | PRIMARY KEY '(' ColumnList ')'
-	  | FOREIGN KEY '(' ColName ')' REFERENCES TbName '(' ColName ')'
-	  ;
+Field           :   ColName Type
+                |   ColName Type NOT NULL
+	            |   PRIMARY KEY '(' ColumnList ')'
+	            |   FOREIGN KEY '(' ColName ')' REFERENCES TbName '(' ColName ')'
+	            ;
 
-Type : INT VALUE_INT
-	 | VARCHAR VALUE_INT
-	 | DATE
-	 | FLOAT
-	 ;
+Type            :   INT VALUE_INT
+	            |   VARCHAR VALUE_INT
+	            |   DATE
+	            |   FLOAT
+	            ;
 
-ValueLists : '(' ValueList ')'
-		   | ValueLists ',' ValueList
-		   ;
+ValueLists      :   '(' ValueList ')'
+		        |   ValueLists ',' ValueList
+		        ;
 
-ValueList : Value
-          | ValueList ',' Value
-		  ;
+ValueList       :   Value
+                |   ValueList ',' Value
+		        ;
 
-Value : VALUE_INT
-      | VALUE_STRING
-	  | NULL
-	  ;
+Value           :   VALUE_INT
+                |   VALUE_STRING
+	            |   NULL
+	            ;
 
 WhereClause     :   Col Op Expr
 			    |   Col IS NOT NULL

@@ -435,12 +435,12 @@ yyreduce:
     switch (yyn)
     {
 case 1:
-#line 19 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 19 "smql/parser.y"
 {
 			}
 break;
 case 2:
-#line 22 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 22 "smql/parser.y"
 {
 			}
 break;
