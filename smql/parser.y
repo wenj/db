@@ -7,16 +7,22 @@
 %union{
     int intVal;
     char *stringVal;
-    Tree::Op *opVal;
-    Tree::Identifier *identVal;
+    Op *opVal;
+    Identifier *identVal;
     Tree *tree;
 }
 
-/* 抄的，我也不明白这些在干什么 */
-%token <ival> VALUE_INT
-%token <sval> VALUE_STRING
-%type <cval> Op
-%type <tree> Program Stmt SysStmt DbStmt TbStmt IdxStmt Field Type WhereClause SetClause
+/* 抄的，我也不明白这些在干什么
+* 好像规定了type之后，就不用调用$$.tree了，可以直接用$$之类的
+*/
+%token      <intVal>        VALUE_INT
+%token      <stringVal>     VALUE_STRING
+%type       <opVal>         Op
+%type       <identVal>      DbName          TbName          ColName
+%type       <tree>          Program         Stmt            SysStmt         DbStmt          TbStmt          IdxStmt
+                            Field           Type            WhereClause     SetClause       SingleSetClause Value
+                            ValueList       ValueLists      Selector        ColumnList      TableList       IDENTIFIER
+                            Expr            Column
 
 %token EQ
 %token NE
@@ -35,45 +41,53 @@
 
 Program         :   /* empty */
 			    {
-			        $$.tree = new Tree();
-			        $$.tree->stmtList = new std::list<Stmt*>();
+			        $$ = new Tree();
 			    }
 			    |   Program Stmt
 			    {
-			        $$.tree->stmtList->push_back($2);
+			        $$->stmtList.push_back((Stmt*) $2);
 			    }
 			    ;
 
 Stmt            :   SysStmt ';'
                 {
-                    $$.tree = $1.tree;
+                    $$ = $1;
                 }
 	            |   DbStmt ';'
 	            {
-                    $$.tree = $1.tree;
+                    $$ = $1;
                 }
 	            |   TbStmt ';'
 	            {
-                    $$.tree = $1.tree;
+                    $$ = $1;
                 }
 	            |   IdxStmt ';'
 	            {
-                    $$.tree = $1.tree;
+                    $$ = $1;
                 }
 	            ;
 
 SysStmt         :   SHOW DATABASES
                 {
-                    $$.tree = new SysStmt();
+                    $$ = new SysStmt();
                 }
 
 DbStmt          :   CREATE DATABASE DbName
                 {
-                    $$.tree = new DbStmt((Identifier*) $3.tree);
+                    $$ = new CreateDbStmt($3);
                 }
 	            |   DROP DATABASE DbName
+	            {
+	                $$ = new DropDbStmt($3);
+	            }
 	            |   USE DbName
+	            {
+	                $$ = new UseDbStmt($2);
+	            }
 	            |   SHOW TABLES
+	            {
+	                $$ = new ShowDbStmt();
+	            }
 	            ;
 
 TbStmt          :   CREATE TABLE TbName '(' FieldList ')'
@@ -105,19 +119,6 @@ Type            :   INT VALUE_INT
 	            |   FLOAT
 	            ;
 
-ValueLists      :   '(' ValueList ')'
-		        |   ValueLists ',' ValueList
-		        ;
-
-ValueList       :   Value
-                |   ValueList ',' Value
-		        ;
-
-Value           :   VALUE_INT
-                |   VALUE_STRING
-	            |   NULL
-	            ;
-
 WhereClause     :   Col Op Expr
 			    |   Col IS NOT NULL
 			    |   WhereClause AND WhereClause
@@ -128,42 +129,156 @@ Col             :   TbName '.' ColName
 
 Op              :   EQ
                 |   NQ
+                {
+                    $$ = new Op(Tree.GE);
+                }
                 |   LT
+                {
+                    $$ = new Op(Tree.LT);
+                }
                 |   LE
+                {
+                    $$ = new Op(Tree.LE);
+                }
                 |   GT
+                {
+                    $$ = new Op(Tree.GT);
+                }
                 |   GE
+                {
+                    $$ = new Op(Tree.GE);
+                }
                 ;
 
 Expr            :   Value
-	            |   Col
+                {
+                    $$ = new ValueExpr((Value*) $1);
+                }
+	            |   Column
+	            {
+	                $$ = new ColExpr((Column*) $1);
+	            }
 	            ;
 
-SetClause       :   ColName EQ Value
-		        |   SetClause ',' ColName EQ Value
+SetClause       :   SingleSetClause
+                {
+                    std::list<SingleSetClause*> singleList;
+                    singleList.push_back((SingleSetClause*) $1);
+                    $$ = new SetClause(&singleList);
+                }
+		        |   SetClause ',' SingleSetClause
+		        {
+		            std::list<SingleSetClause*>* beforeList = ((SetClause*) $1)->getSetClauseList();
+		            std::list<SingleSetClause*> singleList;
+		            singleList.insert(singleList.end(), beforeList->begin(), beforeList->end());
+		            singleList.push_back((SingleSetClause*) $3);
+		            $$ = new SetClause(&singleList);
+		        }
 		        ;
 
+SingleSetClause :   ColName EQ Value
+                {
+                    $$ = new SingleSetClause($1, $3);
+                }
 
 Selector        :   '*'
-		        |   ColList
-		        ;
-
-ColList         :   Col
-		        |   ColList Col
+                {
+                    // Tree.columnList 是空的
+                }
+		        |   ColumnList
+		        {
+		            $$ = new Tree();
+		            $$->columnList = $1->columnList;
+		        }
 		        ;
 
 TableList       :   TbName
+                {
+                    $$ = new Tree();
+                    $$->tableList.push_back($1);
+                }
 		        |   TableList ',' TbName
+		        {
+		            $$ = new Tree();
+		            $$->tableList.insert($$->tableList.end(), $1->tableList.begin(), $1->tableList.end());
+		            $$->tableList.push_back($3);
+		        }
 		        ;
 
-ColumnList      :   ColName
-		        |   ColumnList ',' ColName
+ColumnList      :   Column
+                {
+                    $$ = new Tree();
+                    $$->columnList.push_back($1);
+                }
+		        |   ColumnList ',' Column
+		        {
+		            $$ = new Tree();
+		            $$->columnList.insert($$->columnList.end(), $1->columnList.begin(), $1->columnList.end());
+		            $$->columnList.push_back($3);
+		        }
 		        ;
+
+Column          :   TbName '.' ColName
+                {
+                    $$ = new Column($1, $3);
+                }
+                |   ColName
+                {
+                    $$ = new Column($1);
+                }
+                ;
+
+ValueLists      :   '(' ValueList ')'
+                {
+                    $$ = new Tree();
+                    $$->valueLists.push_back($2->valueList);
+                }
+		        |   ValueLists ',' ValueList
+		        {
+		            $$ = new Tree();
+                    $$->valueLists.insert($$->valueLists.end(), $1->valueLists.begin(), $1->valueLists.end());
+                    $$->valueLists.push_back($3->valueList);
+		        }
+		        ;
+
+ValueList       :   Value
+                {
+                    $$ = new Tree();
+                    $$->valueList.push_back($1);
+                }
+                |   ValueList ',' Value
+                {
+                    $$ = new Tree();
+                    $$->valueList.insert($$->valueList.end(), $1->valueList.begin(), $1->valueList.end());
+                    $$->valueList.push_back($3);
+                }
+		        ;
+
+Value           :   VALUE_INT
+                {
+                    $$ = new IntValue($1.intVal);
+                }
+                |   VALUE_STRING
+                {
+                    $$ = new StringValue($1.stringVal);
+                }
+	            |   NULL
+	            {
+	                $$ = new NullValue();
+	            }
+	            ;
 
 DbName          :   IDENTIFIER
                 {
-                    $$.tree = new Identifier();
+                    $$ = $1;
                 }
 
 TbName          :   IDENTIFIER
+                {
+                    $$ = $1;
+                }
 
 ColName         :   IDENTIFIER
+                {
+                    $$ = $1;
+                }

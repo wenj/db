@@ -1,5 +1,6 @@
 %{
 #include <cstring>
+#include "Tree.h"
 #include "parser.h"  // 由YACC自动生成
 %}
 
@@ -77,7 +78,7 @@
 
 [A-Za-z][_0-9A-Za-z]*			{
                                     // 标识符
-									yylval.identVal = copy_string(yytext, yyleng);
+									yylval.identVal = new Identifier(copy_string(yytext, yyleng));
 									return IDENTIFIER;
 								}
 
@@ -93,4 +94,12 @@
 									return VALUE_STRING;
 								}
 %%
-#include "scanhelp.c"
+
+// 复制串
+static char *copy_string(char *s, int len)
+{
+   char *copy = new char[len + 1];
+   strncpy(copy, s, len);
+   copy[len] = '\0';
+   return copy;
+}
