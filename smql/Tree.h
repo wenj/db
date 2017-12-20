@@ -50,8 +50,8 @@ public:
 };
 
 /**
-     * 标识符（数据库名称、列名）
-     */
+* 标识符（数据库名称、列名）
+*/
 class Identifier: public Tree {
 private:
     char* name;

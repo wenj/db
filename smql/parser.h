@@ -18,7 +18,7 @@
 #define PRIMARY 274
 #define KEY 275
 #define NOT 276
-#define NULL 277
+#define NULL_D 277
 #define INSERT 278
 #define INTO 279
 #define VALUES 280
@@ -39,11 +39,3 @@
 #define FOREIGN 295
 #define REFERENCES 296
 #define EOF 297
-typedef union{
-    int intVal;
-    char *stringVal;
-    Op *opVal;
-    Identifier *identVal;
-    Tree *tree;
-} YYSTYPE;
-extern YYSTYPE yylval;

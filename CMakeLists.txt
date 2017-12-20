@@ -12,18 +12,18 @@ set(SMQL_DIR "smql")
 set(LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib")
 
 # Lexer和Parser
-set(FLEX_EXECUTABLE ${LIB_DIR}/flex/flex++)
+set(FLEX_EXECUTABLE ${LIB_DIR}/flex/flex)
 set(YACC_EXECUTABLE ${LIB_DIR}/byacc/yacc)
 set(FlexInput ${CMAKE_CURRENT_SOURCE_DIR}/${SMQL_DIR}/lexer.l)
 set(YACCInput ${CMAKE_CURRENT_SOURCE_DIR}/${SMQL_DIR}/parser.y)
-set(FlexOutput ${CMAKE_CURRENT_SOURCE_DIR}/${SMQL_DIR}/lexer.cc)
+set(FlexOutput ${CMAKE_CURRENT_SOURCE_DIR}/${SMQL_DIR}/lexer.c)
 set(YACCOutputHeader ${CMAKE_CURRENT_SOURCE_DIR}/${SMQL_DIR}/parser.h)
 set(YACCOutputSource ${CMAKE_CURRENT_SOURCE_DIR}/${SMQL_DIR}/parser.cc)
 ADD_CUSTOM_COMMAND(
         OUTPUT ${FlexOutput}
         COMMAND ${FLEX_EXECUTABLE} ${FlexInput}
         COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/rename_lex
-        COMMENT "Generating lexer.cc"
+        COMMENT "Generating lexer.c"
 )
 ADD_CUSTOM_COMMAND(
         OUTPUT ${YACCOutputHeader} ${YACCOutputSource}
@@ -40,7 +40,7 @@ set(SOURCE_FILES main.cpp
             ${RM_DIR}/rm_record.cc ${RM_DIR}/rm_rid.cc
         ${IX_DIR}/ix_indexhandle.cc ${IX_DIR}/ix_indexscan.cc ${IX_DIR}/ix_manager.cc
         ${FlexOutput} ${YACCOutputSource}
-        ${SMQL_DIR}/Tree.cpp)
+        ${SMQL_DIR}/Tree.cpp smql/YYSTYPE.h)
 
 add_executable(mydb ${SOURCE_FILES})
 

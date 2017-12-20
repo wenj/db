@@ -1,21 +1,24 @@
 %{
+#include "YYSTYPE.h"
 #include "Tree.h"
 #include "pf.h"     // for PF_PrintError
 #include "rm.h"     // for RM_PrintError
 #include "ix.h"     // for IX_PrintError
 #include "sm.h"
 // #include "ql.h"
+
 %}
 
 %start Program
 
+/*
 %union{
     int intVal;
     char *stringVal;
     Op *opVal;
     Identifier *identVal;
     Tree *tree;
-}
+}*/
 
 /* 抄的，我也不明白这些在干什么
 * 好像规定了type之后，就不用调用$$.tree了，可以直接用$$之类的
@@ -36,7 +39,7 @@
 %token GT
 %token GE
 %token DATABASE DATABASES TABLE TABLES SHOW CREATE
-%token DROP USE PRIMARY KEY NOT NULL
+%token DROP USE PRIMARY KEY NOT NULL_D
 %token INSERT INTO VALUES DELETE FROM WHERE
 %token UPDATE SET SELECT IS INT VARCHAR
 %token DESC INDEX AND DATE FLOAT FOREIGN
@@ -158,7 +161,7 @@ Field           :   ColName Type
                 {
                     $$ = new NormalField((Identifier*) $1, (Type*) $2);
                 }
-                |   ColName Type NOT NULL
+                |   ColName Type NOT NULL_D
                 {
                     $$ = new NotNullField((Identifier*) $1, (Type*) $2);
                 }
@@ -191,11 +194,11 @@ WhereClause     :   Column Op Expr
                 {
                     $$ = new NormalWhereClause((Column*) $1, (Op*) $2, (Expr*) $3);
                 }
-			    |   Column IS NULL
+			    |   Column IS NULL_D
 			    {
 			        $$ = new IsNullWhereClause((Column*) $1, false);
 			    }
-			    |   Column IS NOT NULL
+			    |   Column IS NOT NULL_D
 			    {
 			        $$ = new IsNullWhereClause((Column*) $1, true);
 			    }
@@ -343,28 +346,30 @@ Value           :   VALUE_INTEGER
                 {
                     $$ = new StringValue($1);
                 }
-	            |   NULL
+	            |   NULL_D
 	            {
 	                $$ = new NullValue();
 	            }
 	            ;
 
-DbName          :   IDENTIFIER
+DbName          :   VALUE_STRING
                 {
-                    $$ = (Identifier*) $1;
+                    $$ = new Identifier($1);
                 }
 
-TbName          :   IDENTIFIER
+TbName          :   VALUE_STRING
                 {
-                    $$ = (Identifier*) $1;
+                    $$ = new Identifier($1);
                 }
 
-ColName         :   IDENTIFIER
+ColName         :   VALUE_STRING
                 {
-                    $$ = (Identifier*) $1;
+                    $$ = new Identifier($1);
                 }
 
 %%
 
-int yyparse(void);
-int yylex(void);
+extern "C" {
+    int yyparse(void);
+    int yylex(void);
+}

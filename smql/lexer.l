@@ -1,12 +1,11 @@
 %{
-#include <iostream>
-#include <cstring>
-#include "Tree.h"
+#include <string.h>
 #include "parser.h"  // 由YACC自动生成
-
-using namespace std;
+#include "YYSTYPE.h"
 
 static char *copy_string(char *s, int len);
+
+extern YYSTYPE yylval;  // patch（也不知道为啥）
 %}
 
 %%
@@ -22,7 +21,7 @@ static char *copy_string(char *s, int len);
 "PRIMARY"                       { return PRIMARY; }
 "KEY"                           { return KEY; }
 "NOT"                           { return NOT; }
-"NULL"                          { return NULL; }
+"NULL"                          { return NULL_D; }
 "INSERT"                        { return INSERT; }
 "INTO"                          { return INTO; }
 "VALUES"                        { return VALUES; }
@@ -53,7 +52,7 @@ static char *copy_string(char *s, int len);
 "primary"                       { return PRIMARY; }
 "key"                           { return KEY; }
 "not"                           { return NOT; }
-"null"                          { return NULL; }
+"null"                          { return NULL_D; }
 "insert"                        { return INSERT; }
 "into"                          { return INTO; }
 "values"                        { return VALUES; }
@@ -83,8 +82,8 @@ static char *copy_string(char *s, int len);
 
 [A-Za-z][_0-9A-Za-z]*			{
                                     // 标识符
-									yylval.identVal = new Identifier(copy_string(yytext, yyleng));
-									return IDENTIFIER;
+									yylval.stringVal = copy_string(yytext, yyleng);
+									return VALUE_STRING;
 								}
 
 [0-9]+							{
@@ -104,7 +103,7 @@ static char *copy_string(char *s, int len);
 // 复制串
 static char *copy_string(char *s, int len)
 {
-   char *copy = new char[len + 1];
+   char *copy = (char*) malloc(len + 1);
    strncpy(copy, s, len);
    copy[len] = '\0';
    return copy;
