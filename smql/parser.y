@@ -6,6 +6,7 @@
 #include "ix.h"     // for IX_PrintError
 #include "sm.h"
 // #include "ql.h"
+#include <iostream>
 
 %}
 
@@ -41,8 +42,8 @@
 %token DATABASE DATABASES TABLE TABLES SHOW CREATE
 %token DROP USE PRIMARY KEY NOT NULL_D
 %token INSERT INTO VALUES DELETE FROM WHERE
-%token UPDATE SET SELECT IS INT VARCHAR
-%token DESC INDEX AND DATE FLOAT FOREIGN
+%token UPDATE SET SELECT IS INT_D VARCHAR  /* INT FLOAT NULL 都不能直接作为token…… */
+%token DESC INDEX AND DATE FLOAT_D FOREIGN
 %token REFERENCES
 %token EOF /* patch for lexer.cc */
 
@@ -175,7 +176,7 @@ Field           :   ColName Type
 	            }
 	            ;
 
-Type            :   INT VALUE_INTEGER
+Type            :   INT_D VALUE_INTEGER
                 {
                     $$ = new IntType($2);
                 }
@@ -373,3 +374,22 @@ extern "C" {
     int yyparse(void);
     int yylex(void);
 }
+
+// 以下是抄来的
+/*
+ * Required by yacc
+ */
+void yyerror(char const *s) // New in 2000
+{
+    std::cout << s << std::endl;
+}
+
+#if 0
+/*
+ * Sometimes required
+ */
+int yywrap(void)
+{
+    return 1;
+}
+#endif

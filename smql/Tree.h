@@ -23,12 +23,12 @@ class Field;
 class Tree {
 public:
     // 定义Operator
-    static const int OP_GE = 1;
-    static const int OP_GT = OP_GE + 1;
-    static const int OP_EQ = OP_GT + 1;
-    static const int OP_LT = OP_EQ + 1;
-    static const int OP_LE = OP_LT + 1;
-    static const int OP_NE = OP_LE + 1;
+    static const int OP_GE;
+    static const int OP_GT;
+    static const int OP_EQ;
+    static const int OP_LT;
+    static const int OP_LE;
+    static const int OP_NE;
 
     std::list<Stmt*> stmtList;
     std::list<Column*> columnList;

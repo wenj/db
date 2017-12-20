@@ -29,13 +29,13 @@
 #define SET 285
 #define SELECT 286
 #define IS 287
-#define INT 288
+#define INT_D 288
 #define VARCHAR 289
 #define DESC 290
 #define INDEX 291
 #define AND 292
 #define DATE 293
-#define FLOAT 294
+#define FLOAT_D 294
 #define FOREIGN 295
 #define REFERENCES 296
 #define EOF 297

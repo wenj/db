@@ -523,11 +523,12 @@ char *yytext;
 #include <string.h>
 #include "parser.h"  // 由YACC自动生成
 #include "YYSTYPE.h"
+#include "redbase.h"
 
 static char *copy_string(char *s, int len);
 
 extern YYSTYPE yylval;  // patch（也不知道为啥）
-#line 531 "lex.yy.c"
+#line 532 "lex.yy.c"
 
 /* Macros after this point can all be overridden by user definitions in
  * section 1.
@@ -678,10 +679,10 @@ YY_DECL
 	register char *yy_cp, *yy_bp;
 	register int yy_act;
 
-#line 11 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 12 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 
 
-#line 685 "lex.yy.c"
+#line 686 "lex.yy.c"
 
 	if ( yy_init )
 		{
@@ -766,347 +767,347 @@ do_action:	/* This label is used only to access EOF actions. */
 
 case 1:
 YY_RULE_SETUP
-#line 13 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 14 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return DATABASE; }
 	YY_BREAK
 case 2:
 YY_RULE_SETUP
-#line 14 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 15 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return DATABASES; }
 	YY_BREAK
 case 3:
 YY_RULE_SETUP
-#line 15 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 16 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return TABLE; }
 	YY_BREAK
 case 4:
 YY_RULE_SETUP
-#line 16 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 17 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return TABLES; }
 	YY_BREAK
 case 5:
 YY_RULE_SETUP
-#line 17 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 18 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return SHOW; }
 	YY_BREAK
 case 6:
 YY_RULE_SETUP
-#line 18 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 19 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return CREATE; }
 	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 19 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 20 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return DROP; }
 	YY_BREAK
 case 8:
 YY_RULE_SETUP
-#line 20 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 21 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return USE; }
 	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 21 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 22 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return PRIMARY; }
 	YY_BREAK
 case 10:
 YY_RULE_SETUP
-#line 22 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 23 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return KEY; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 23 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 24 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return NOT; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 24 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 25 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return NULL_D; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 25 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 26 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return INSERT; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 26 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 27 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return INTO; }
 	YY_BREAK
 case 15:
 YY_RULE_SETUP
-#line 27 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 28 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return VALUES; }
 	YY_BREAK
 case 16:
 YY_RULE_SETUP
-#line 28 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 29 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return DELETE; }
 	YY_BREAK
 case 17:
 YY_RULE_SETUP
-#line 29 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 30 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return FROM; }
 	YY_BREAK
 case 18:
 YY_RULE_SETUP
-#line 30 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 31 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return WHERE; }
 	YY_BREAK
 case 19:
 YY_RULE_SETUP
-#line 31 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 32 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return UPDATE; }
 	YY_BREAK
 case 20:
 YY_RULE_SETUP
-#line 32 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 33 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return SET; }
 	YY_BREAK
 case 21:
 YY_RULE_SETUP
-#line 33 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 34 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return SELECT; }
 	YY_BREAK
 case 22:
 YY_RULE_SETUP
-#line 34 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 35 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return IS; }
 	YY_BREAK
 case 23:
 YY_RULE_SETUP
-#line 35 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
-{ return INT; }
+#line 36 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+{ return INT_D; }
 	YY_BREAK
 case 24:
 YY_RULE_SETUP
-#line 36 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 37 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return VARCHAR; }
 	YY_BREAK
 case 25:
 YY_RULE_SETUP
-#line 37 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 38 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return DESC; }
 	YY_BREAK
 case 26:
 YY_RULE_SETUP
-#line 38 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 39 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return REFERENCES; }
 	YY_BREAK
 case 27:
 YY_RULE_SETUP
-#line 39 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 40 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return INDEX; }
 	YY_BREAK
 case 28:
 YY_RULE_SETUP
-#line 40 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 41 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return AND; }
 	YY_BREAK
 case 29:
 YY_RULE_SETUP
-#line 41 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 42 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return DATE; }
 	YY_BREAK
 case 30:
 YY_RULE_SETUP
-#line 42 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
-{ return FLOAT; }
+#line 43 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+{ return FLOAT_D; }
 	YY_BREAK
 case 31:
 YY_RULE_SETUP
-#line 43 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 44 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return FOREIGN; }
 	YY_BREAK
 case 32:
 YY_RULE_SETUP
-#line 44 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 45 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return DATABASE; }
 	YY_BREAK
 case 33:
 YY_RULE_SETUP
-#line 45 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 46 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return DATABASES; }
 	YY_BREAK
 case 34:
 YY_RULE_SETUP
-#line 46 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 47 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return TABLE; }
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 47 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 48 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return TABLES; }
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 48 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 49 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return SHOW; }
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 49 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 50 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return CREATE; }
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 50 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 51 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return DROP; }
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 51 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 52 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return USE; }
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 52 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 53 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return PRIMARY; }
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 53 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 54 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return KEY; }
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 54 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 55 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return NOT; }
 	YY_BREAK
 case 43:
 YY_RULE_SETUP
-#line 55 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 56 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return NULL_D; }
 	YY_BREAK
 case 44:
 YY_RULE_SETUP
-#line 56 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 57 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return INSERT; }
 	YY_BREAK
 case 45:
 YY_RULE_SETUP
-#line 57 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 58 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return INTO; }
 	YY_BREAK
 case 46:
 YY_RULE_SETUP
-#line 58 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 59 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return VALUES; }
 	YY_BREAK
 case 47:
 YY_RULE_SETUP
-#line 59 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 60 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return DELETE; }
 	YY_BREAK
 case 48:
 YY_RULE_SETUP
-#line 60 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 61 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return FROM; }
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
-#line 61 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 62 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return WHERE; }
 	YY_BREAK
 case 50:
 YY_RULE_SETUP
-#line 62 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 63 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return UPDATE; }
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
-#line 63 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 64 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return SET; }
 	YY_BREAK
 case 52:
 YY_RULE_SETUP
-#line 64 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 65 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return SELECT; }
 	YY_BREAK
 case 53:
 YY_RULE_SETUP
-#line 65 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 66 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return IS; }
 	YY_BREAK
 case 54:
 YY_RULE_SETUP
-#line 66 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
-{ return INT; }
+#line 67 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+{ return INT_D; }
 	YY_BREAK
 case 55:
 YY_RULE_SETUP
-#line 67 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 68 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return VARCHAR; }
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
-#line 68 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 69 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return DESC; }
 	YY_BREAK
 case 57:
 YY_RULE_SETUP
-#line 69 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 70 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return REFERENCES; }
 	YY_BREAK
 case 58:
 YY_RULE_SETUP
-#line 70 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 71 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return INDEX; }
 	YY_BREAK
 case 59:
 YY_RULE_SETUP
-#line 71 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 72 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return AND; }
 	YY_BREAK
 case 60:
 YY_RULE_SETUP
-#line 72 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 73 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return DATE; }
 	YY_BREAK
 case 61:
 YY_RULE_SETUP
-#line 73 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
-{ return FLOAT; }
+#line 74 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+{ return FLOAT_D; }
 	YY_BREAK
 case 62:
 YY_RULE_SETUP
-#line 74 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 75 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return FOREIGN; }
 	YY_BREAK
 case 63:
 YY_RULE_SETUP
-#line 76 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 77 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return GE; }
 	YY_BREAK
 case 64:
 YY_RULE_SETUP
-#line 77 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 78 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return GT; }
 	YY_BREAK
 case 65:
 YY_RULE_SETUP
-#line 78 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 79 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return EQ; }
 	YY_BREAK
 case 66:
 YY_RULE_SETUP
-#line 79 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 80 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return LT; }
 	YY_BREAK
 case 67:
 YY_RULE_SETUP
-#line 80 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 81 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return LE; }
 	YY_BREAK
 case 68:
 YY_RULE_SETUP
-#line 81 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 82 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 { return NE; }
 	YY_BREAK
 case 69:
 YY_RULE_SETUP
-#line 83 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 84 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 {
                                     // 标识符
 									yylval.stringVal = copy_string(yytext, yyleng);
@@ -1115,7 +1116,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 89 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 90 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 {
                                     // 整数
 									yylval.intVal = atoi(yytext);
@@ -1124,7 +1125,7 @@ YY_RULE_SETUP
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 95 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 96 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 {
                                     // string
 									yylval.stringVal = copy_string(yytext, yyleng);
@@ -1133,10 +1134,10 @@ YY_RULE_SETUP
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 101 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 102 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 ECHO;
 	YY_BREAK
-#line 1140 "lex.yy.c"
+#line 1141 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2022,7 +2023,7 @@ int main()
 	return 0;
 	}
 #endif
-#line 101 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 102 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 
 
 // 复制串

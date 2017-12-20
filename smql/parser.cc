@@ -16,8 +16,9 @@ static char yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93";
 #include "ix.h"     /* for IX_PrintError*/
 #include "sm.h"
 /* #include "ql.h"*/
+#include <iostream>
 
-#line 21 "y.tab.c"
+#line 22 "y.tab.c"
 #define VALUE_INTEGER 257
 #define VALUE_STRING 258
 #define IDENTIFIER 259
@@ -49,13 +50,13 @@ static char yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93";
 #define SET 285
 #define SELECT 286
 #define IS 287
-#define INT 288
+#define INT_D 288
 #define VARCHAR 289
 #define DESC 290
 #define INDEX 291
 #define AND 292
 #define DATE 293
-#define FLOAT 294
+#define FLOAT_D 294
 #define FOREIGN 295
 #define REFERENCES 296
 #define EOF 297
@@ -218,7 +219,7 @@ char *yyname[] = {
 "VALUE_INTEGER","VALUE_STRING","IDENTIFIER","EQ","NE","LT","LE","GT","GE",
 "DATABASE","DATABASES","TABLE","TABLES","SHOW","CREATE","DROP","USE","PRIMARY",
 "KEY","NOT","NULL_D","INSERT","INTO","VALUES","DELETE","FROM","WHERE","UPDATE",
-"SET","SELECT","IS","INT","VARCHAR","DESC","INDEX","AND","DATE","FLOAT",
+"SET","SELECT","IS","INT_D","VARCHAR","DESC","INDEX","AND","DATE","FLOAT_D",
 "FOREIGN","REFERENCES","EOF",
 };
 char *yyrule[] = {
@@ -250,7 +251,7 @@ char *yyrule[] = {
 "Field : ColName Type NOT NULL_D",
 "Field : PRIMARY KEY '(' ColumnList ')'",
 "Field : FOREIGN KEY '(' ColName ')' REFERENCES TbName '(' ColName ')'",
-"Type : INT VALUE_INTEGER",
+"Type : INT_D VALUE_INTEGER",
 "Type : VARCHAR VALUE_INTEGER",
 "WhereClause : Column Op Expr",
 "WhereClause : Column IS NULL_D",
@@ -309,13 +310,32 @@ YYSTYPE yylval;
 short yyss[YYSTACKSIZE];
 YYSTYPE yyvs[YYSTACKSIZE];
 #define yystacksize YYSTACKSIZE
-#line 371 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 372 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 
 extern "C" {
     int yyparse(void);
     int yylex(void);
 }
-#line 319 "y.tab.c"
+
+// 以下是抄来的
+/*
+ * Required by yacc
+ */
+void yyerror(char const *s) // New in 2000
+{
+    std::cout << s << std::endl;
+}
+
+#if 0
+/*
+ * Sometimes required
+ */
+int yywrap(void)
+{
+    return 1;
+}
+#endif
+#line 339 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYREJECT goto yyabort
 #define YYACCEPT goto yyaccept
@@ -457,140 +477,140 @@ yyreduce:
     switch (yyn)
     {
 case 1:
-#line 52 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 53 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 			        yyval.tree = new Tree();
 			    }
 break;
 case 2:
-#line 56 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 57 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 			        yyval.tree->stmtList.push_back((Stmt*) yyvsp[0].tree);
 			    }
 break;
 case 3:
-#line 60 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 61 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 			        yyval.tree = nullptr;
 			    }
 break;
 case 4:
-#line 66 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 67 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = yyvsp[-1].tree;
                 }
 break;
 case 5:
-#line 70 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 71 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = yyvsp[-1].tree;
                 }
 break;
 case 6:
-#line 74 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 75 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = yyvsp[-1].tree;
                 }
 break;
 case 7:
-#line 78 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 79 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = yyvsp[-1].tree;
                 }
 break;
 case 8:
-#line 84 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 85 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new SysStmt();
                 }
 break;
 case 9:
-#line 89 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 90 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new CreateDbStmt(yyvsp[0].identVal);
                 }
 break;
 case 10:
-#line 93 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 94 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 	                yyval.tree = new DropDbStmt(yyvsp[0].identVal);
 	            }
 break;
 case 11:
-#line 97 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 98 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 	                yyval.tree = new UseDbStmt(yyvsp[0].identVal);
 	            }
 break;
 case 12:
-#line 101 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 102 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 	                yyval.tree = new ShowDbStmt();
 	            }
 break;
 case 13:
-#line 107 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 108 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new CreateTbStmt(yyvsp[-3].identVal, &yyvsp[-1].tree->fieldList);
                 }
 break;
 case 14:
-#line 111 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 112 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new DropTbStmt(yyvsp[0].identVal);
                 }
 break;
 case 15:
-#line 115 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 116 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 	                yyval.tree = new DescTbStmt(yyvsp[0].identVal);
 	            }
 break;
 case 16:
-#line 119 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 120 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 	                yyval.tree = new InsertTbStmt(yyvsp[-2].identVal, &yyvsp[0].tree->valueList);
 	            }
 break;
 case 17:
-#line 123 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 124 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 	                yyval.tree = new DeleteTbStmt(yyvsp[-2].identVal, (WhereClause*) yyvsp[0].tree);
 	            }
 break;
 case 18:
-#line 127 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 128 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 	                yyval.tree = new UpdateTbStmt(yyvsp[-4].identVal, (SetClause*) yyvsp[-2].tree, (WhereClause*) yyvsp[0].tree);
 	            }
 break;
 case 19:
-#line 131 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 132 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 	                yyval.tree = new SelectTbStmt(&yyvsp[-4].tree->columnList, &yyvsp[-2].tree->tableList, (WhereClause*) yyvsp[0].tree);
 	            }
 break;
 case 20:
-#line 137 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 138 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new CreateIdxStmt(yyvsp[-3].identVal, yyvsp[-1].identVal);
                 }
 break;
 case 21:
-#line 141 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 142 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new DropIdxStmt(yyvsp[-3].identVal, yyvsp[-1].identVal);
                 }
 break;
 case 22:
-#line 147 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 148 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new Tree();
                     yyval.tree->fieldList.push_back((Field*) yyvsp[0].tree);
                 }
 break;
 case 23:
-#line 152 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 153 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 		            yyval.tree = new Tree();
 		            yyval.tree->fieldList.insert(yyval.tree->fieldList.end(), yyvsp[-2].tree->fieldList.begin(), yyvsp[-2].tree->fieldList.end());
@@ -598,115 +618,115 @@ case 23:
 		        }
 break;
 case 24:
-#line 161 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 162 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new NormalField((Identifier*) yyvsp[-1].identVal, (Type*) yyvsp[0].tree);
                 }
 break;
 case 25:
-#line 165 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 166 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new NotNullField((Identifier*) yyvsp[-3].identVal, (Type*) yyvsp[-2].tree);
                 }
 break;
 case 26:
-#line 169 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 170 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 	                yyval.tree = new PrimaryField(&(yyvsp[-1].tree->columnList));
 	            }
 break;
 case 27:
-#line 173 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 174 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 	                yyval.tree = new ForeignField(yyvsp[-6].identVal, yyvsp[-3].identVal, yyvsp[-1].identVal);
 	            }
 break;
 case 28:
-#line 179 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 180 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new IntType(yyvsp[0].intVal);
                 }
 break;
 case 29:
-#line 183 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 184 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 	                yyval.tree = new VarcharType(yyvsp[0].intVal);
 	            }
 break;
 case 30:
-#line 194 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 195 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new NormalWhereClause((Column*) yyvsp[-2].tree, (Op*) yyvsp[-1].opVal, (Expr*) yyvsp[0].tree);
                 }
 break;
 case 31:
-#line 198 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 199 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 			        yyval.tree = new IsNullWhereClause((Column*) yyvsp[-2].tree, false);
 			    }
 break;
 case 32:
-#line 202 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 203 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 			        yyval.tree = new IsNullWhereClause((Column*) yyvsp[-3].tree, true);
 			    }
 break;
 case 33:
-#line 206 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 207 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 			        yyval.tree = new AndWhereClause((WhereClause*) yyvsp[-2].tree, (WhereClause*) yyvsp[0].tree);
 			    }
 break;
 case 34:
-#line 212 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 213 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.opVal = new Op(Tree::OP_EQ);
                 }
 break;
 case 35:
-#line 216 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 217 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.opVal = new Op(Tree::OP_NE);
                 }
 break;
 case 36:
-#line 220 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 221 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.opVal = new Op(Tree::OP_LT);
                 }
 break;
 case 37:
-#line 224 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 225 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.opVal = new Op(Tree::OP_LE);
                 }
 break;
 case 38:
-#line 228 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 229 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.opVal = new Op(Tree::OP_GT);
                 }
 break;
 case 39:
-#line 232 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 233 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.opVal = new Op(Tree::OP_GE);
                 }
 break;
 case 40:
-#line 238 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 239 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new ValueExpr((Value*) yyvsp[0].tree);
                 }
 break;
 case 41:
-#line 242 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 243 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 	                yyval.tree = new ColExpr((Column*) yyvsp[0].tree);
 	            }
 break;
 case 42:
-#line 248 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 249 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     std::list<SingleSetClause*> singleList;
                     singleList.push_back((SingleSetClause*) yyvsp[0].tree);
@@ -714,7 +734,7 @@ case 42:
                 }
 break;
 case 43:
-#line 254 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 255 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 		            std::list<SingleSetClause*>* beforeList = ((SetClause*) yyvsp[-2].tree)->getSetClauseList();
 		            std::list<SingleSetClause*> singleList;
@@ -724,33 +744,33 @@ case 43:
 		        }
 break;
 case 44:
-#line 264 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 265 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new SingleSetClause(yyvsp[-2].identVal, (Value*) yyvsp[0].tree);
                 }
 break;
 case 45:
-#line 269 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 270 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     /* Tree.columnList 是空的*/
                 }
 break;
 case 46:
-#line 273 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 274 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 		            yyval.tree = new Tree();
 		            yyval.tree->columnList = yyvsp[0].tree->columnList;
 		        }
 break;
 case 47:
-#line 280 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 281 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new Tree();
                     yyval.tree->tableList.push_back(yyvsp[0].identVal);
                 }
 break;
 case 48:
-#line 285 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 286 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 		            yyval.tree = new Tree();
 		            yyval.tree->tableList.insert(yyval.tree->tableList.end(), yyvsp[-2].tree->tableList.begin(), yyvsp[-2].tree->tableList.end());
@@ -758,14 +778,14 @@ case 48:
 		        }
 break;
 case 49:
-#line 293 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 294 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new Tree();
                     yyval.tree->columnList.push_back((Column*) yyvsp[0].tree);
                 }
 break;
 case 50:
-#line 298 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 299 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 		            yyval.tree = new Tree();
 		            yyval.tree->columnList.insert(yyval.tree->columnList.end(), yyvsp[-2].tree->columnList.begin(), yyvsp[-2].tree->columnList.end());
@@ -773,26 +793,26 @@ case 50:
 		        }
 break;
 case 51:
-#line 306 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 307 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new Column(yyvsp[-2].identVal, yyvsp[0].identVal);
                 }
 break;
 case 52:
-#line 310 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 311 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new Column(yyvsp[0].identVal);
                 }
 break;
 case 53:
-#line 316 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 317 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new Tree();
                     yyval.tree->valueLists.push_back(yyvsp[-1].tree->valueList);
                 }
 break;
 case 54:
-#line 321 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 322 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 		            yyval.tree = new Tree();
                     yyval.tree->valueLists.insert(yyval.tree->valueLists.end(), yyvsp[-2].tree->valueLists.begin(), yyvsp[-2].tree->valueLists.end());
@@ -800,14 +820,14 @@ case 54:
 		        }
 break;
 case 55:
-#line 329 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 330 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new Tree();
                     yyval.tree->valueList.push_back((Value*) yyvsp[0].tree);
                 }
 break;
 case 56:
-#line 334 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 335 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new Tree();
                     yyval.tree->valueList.insert(yyval.tree->valueList.end(), yyvsp[-2].tree->valueList.begin(), yyvsp[-2].tree->valueList.end());
@@ -815,42 +835,42 @@ case 56:
                 }
 break;
 case 57:
-#line 342 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 343 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new IntValue(yyvsp[0].intVal);
                 }
 break;
 case 58:
-#line 346 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 347 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new StringValue(yyvsp[0].stringVal);
                 }
 break;
 case 59:
-#line 350 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 351 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 	                yyval.tree = new NullValue();
 	            }
 break;
 case 60:
-#line 356 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 357 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.identVal = new Identifier(yyvsp[0].stringVal);
                 }
 break;
 case 61:
-#line 361 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 362 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.identVal = new Identifier(yyvsp[0].stringVal);
                 }
 break;
 case 62:
-#line 366 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 367 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.identVal = new Identifier(yyvsp[0].stringVal);
                 }
 break;
-#line 854 "y.tab.c"
+#line 874 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;

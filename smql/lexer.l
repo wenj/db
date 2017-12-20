@@ -2,6 +2,7 @@
 #include <string.h>
 #include "parser.h"  // 由YACC自动生成
 #include "YYSTYPE.h"
+#include "redbase.h"
 
 static char *copy_string(char *s, int len);
 
@@ -32,14 +33,14 @@ extern YYSTYPE yylval;  // patch（也不知道为啥）
 "SET"                           { return SET; }
 "SELECT"                        { return SELECT; }
 "IS"                            { return IS; }
-"INT"                           { return INT; }
+"INT"                           { return INT_D; }
 "VARCHAR"                       { return VARCHAR; }
 "DESC"                          { return DESC; }
 "REFERENCES"                    { return REFERENCES; }
 "INDEX"                         { return INDEX; }
 "AND"                           { return AND; }
 "DATE"                          { return DATE; }
-"FLOAT"                         { return FLOAT; }
+"FLOAT"                         { return FLOAT_D; }
 "FOREIGN"                       { return FOREIGN; }
 "database"                      { return DATABASE; }
 "databases"                     { return DATABASES; }
@@ -63,14 +64,14 @@ extern YYSTYPE yylval;  // patch（也不知道为啥）
 "set"                           { return SET; }
 "select"                        { return SELECT; }
 "is"                            { return IS; }
-"int"                           { return INT; }
+"int"                           { return INT_D; }
 "varchar"                       { return VARCHAR; }
 "desc"                          { return DESC; }
 "references"                    { return REFERENCES; }
 "index"                         { return INDEX; }
 "and"                           { return AND; }
 "date"                          { return DATE; }
-"float"                         { return FLOAT; }
+"float"                         { return FLOAT_D; }
 "foreign"                       { return FOREIGN; }
 
 ">="                            { return GE; }
