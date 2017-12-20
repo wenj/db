@@ -1,5 +1,10 @@
 %{
 #include "Tree.h"
+#include "pf.h"     // for PF_PrintError
+#include "rm.h"     // for RM_PrintError
+#include "ix.h"     // for IX_PrintError
+#include "sm.h"
+// #include "ql.h"
 %}
 
 %start Program
@@ -15,14 +20,14 @@
 /* 抄的，我也不明白这些在干什么
 * 好像规定了type之后，就不用调用$$.tree了，可以直接用$$之类的
 */
-%token      <intVal>        VALUE_INT
+%token      <intVal>        VALUE_INTEGER
 %token      <stringVal>     VALUE_STRING
 %type       <opVal>         Op
 %type       <identVal>      DbName          TbName          ColName
 %type       <tree>          Program         Stmt            SysStmt         DbStmt          TbStmt          IdxStmt
                             Field           Type            WhereClause     SetClause       SingleSetClause Value
                             ValueList       ValueLists      Selector        ColumnList      TableList       IDENTIFIER
-                            Expr            Column
+                            Expr            Column          FieldList
 
 %token EQ
 %token NE
@@ -36,6 +41,7 @@
 %token UPDATE SET SELECT IS INT VARCHAR
 %token DESC INDEX AND DATE FLOAT FOREIGN
 %token REFERENCES
+%token EOF /* patch for lexer.cc */
 
 %%
 
@@ -46,6 +52,10 @@ Program         :   /* empty */
 			    |   Program Stmt
 			    {
 			        $$->stmtList.push_back((Stmt*) $2);
+			    }
+			    |   EOF
+			    {
+			        $$ = nullptr;
 			    }
 			    ;
 
@@ -91,62 +101,133 @@ DbStmt          :   CREATE DATABASE DbName
 	            ;
 
 TbStmt          :   CREATE TABLE TbName '(' FieldList ')'
+                {
+                    $$ = new CreateTbStmt($3, &$5->fieldList);
+                }
                 |   DROP TABLE TbName
+                {
+                    $$ = new DropTbStmt($3);
+                }
 	            |   DESC TbName
+	            {
+	                $$ = new DescTbStmt($2);
+	            }
 	            |   INSERT INTO TbName VALUES ValueLists
+	            {
+	                $$ = new InsertTbStmt($3, &$5->valueList);
+	            }
 	            |   DELETE FROM TbName WHERE WhereClause
+	            {
+	                $$ = new DeleteTbStmt($3, (WhereClause*) $5);
+	            }
 	            |   UPDATE TbName SET SetClause WHERE WhereClause
+	            {
+	                $$ = new UpdateTbStmt($2, (SetClause*) $4, (WhereClause*) $6);
+	            }
 	            |   SELECT Selector FROM TableList WHERE WhereClause
+	            {
+	                $$ = new SelectTbStmt(&$2->columnList, &$4->tableList, (WhereClause*) $6);
+	            }
 	            ;
 
 IdxStmt         :   CREATE INDEX TbName '(' ColName ')'
+                {
+                    $$ = new CreateIdxStmt($3, $5);
+                }
                 |   DROP INDEX TbName '(' ColName ')'
+                {
+                    $$ = new DropIdxStmt($3, $5);
+                }
 		        ;
 
 FieldList       :   Field
+                {
+                    $$ = new Tree();
+                    $$->fieldList.push_back((Field*) $1);
+                }
 		        |   FieldList ',' Field
+		        {
+		            $$ = new Tree();
+		            $$->fieldList.insert($$->fieldList.end(), $1->fieldList.begin(), $1->fieldList.end());
+                    $$->fieldList.push_back((Field*) $3);
+		        }
 		        ;
 
+/* 问题：是不是这里该干脆把ColName都改成Column */
 Field           :   ColName Type
+                {
+                    $$ = new NormalField((Identifier*) $1, (Type*) $2);
+                }
                 |   ColName Type NOT NULL
-	            |   PRIMARY KEY '(' ColumnList ')'
-	            |   FOREIGN KEY '(' ColName ')' REFERENCES TbName '(' ColName ')'
+                {
+                    $$ = new NotNullField((Identifier*) $1, (Type*) $2);
+                }
+	            |   PRIMARY KEY '(' ColumnList ')'  /* 这里好像从colName变成colList了。。 */
+	            {
+	                $$ = new PrimaryField(&($4->columnList));
+	            }
+	            |   FOREIGN KEY '(' ColName ')' REFERENCES TbName '(' ColName ')'  /* TODO: 这应该也是扩展功能，随便加上了 */
+	            {
+	                $$ = new ForeignField($4, $7, $9);
+	            }
 	            ;
 
-Type            :   INT VALUE_INT
-	            |   VARCHAR VALUE_INT
+Type            :   INT VALUE_INTEGER
+                {
+                    $$ = new IntType($2);
+                }
+	            |   VARCHAR VALUE_INTEGER
+	            {
+	                $$ = new VarcharType($2);
+	            }
+	            /*
+	            TODO: 这是扩展功能吗？？
 	            |   DATE
 	            |   FLOAT
+	            */
 	            ;
 
-WhereClause     :   Col Op Expr
-			    |   Col IS NOT NULL
+WhereClause     :   Column Op Expr
+                {
+                    $$ = new NormalWhereClause((Column*) $1, (Op*) $2, (Expr*) $3);
+                }
+			    |   Column IS NULL
+			    {
+			        $$ = new IsNullWhereClause((Column*) $1, false);
+			    }
+			    |   Column IS NOT NULL
+			    {
+			        $$ = new IsNullWhereClause((Column*) $1, true);
+			    }
 			    |   WhereClause AND WhereClause
+			    {
+			        $$ = new AndWhereClause((WhereClause*) $1, (WhereClause*) $3);
+			    }
 			    ;
 
-Col             :   TbName '.' ColName
-	            ;
-
 Op              :   EQ
-                |   NQ
                 {
-                    $$ = new Op(Tree.GE);
+                    $$ = new Op(Tree::OP_EQ);
+                }
+                |   NE
+                {
+                    $$ = new Op(Tree::OP_NE);
                 }
                 |   LT
                 {
-                    $$ = new Op(Tree.LT);
+                    $$ = new Op(Tree::OP_LT);
                 }
                 |   LE
                 {
-                    $$ = new Op(Tree.LE);
+                    $$ = new Op(Tree::OP_LE);
                 }
                 |   GT
                 {
-                    $$ = new Op(Tree.GT);
+                    $$ = new Op(Tree::OP_GT);
                 }
                 |   GE
                 {
-                    $$ = new Op(Tree.GE);
+                    $$ = new Op(Tree::OP_GE);
                 }
                 ;
 
@@ -178,7 +259,7 @@ SetClause       :   SingleSetClause
 
 SingleSetClause :   ColName EQ Value
                 {
-                    $$ = new SingleSetClause($1, $3);
+                    $$ = new SingleSetClause($1, (Value*) $3);
                 }
 
 Selector        :   '*'
@@ -208,13 +289,13 @@ TableList       :   TbName
 ColumnList      :   Column
                 {
                     $$ = new Tree();
-                    $$->columnList.push_back($1);
+                    $$->columnList.push_back((Column*) $1);
                 }
 		        |   ColumnList ',' Column
 		        {
 		            $$ = new Tree();
 		            $$->columnList.insert($$->columnList.end(), $1->columnList.begin(), $1->columnList.end());
-		            $$->columnList.push_back($3);
+		            $$->columnList.push_back((Column*) $3);
 		        }
 		        ;
 
@@ -244,23 +325,23 @@ ValueLists      :   '(' ValueList ')'
 ValueList       :   Value
                 {
                     $$ = new Tree();
-                    $$->valueList.push_back($1);
+                    $$->valueList.push_back((Value*) $1);
                 }
                 |   ValueList ',' Value
                 {
                     $$ = new Tree();
                     $$->valueList.insert($$->valueList.end(), $1->valueList.begin(), $1->valueList.end());
-                    $$->valueList.push_back($3);
+                    $$->valueList.push_back((Value*) $3);
                 }
 		        ;
 
-Value           :   VALUE_INT
+Value           :   VALUE_INTEGER
                 {
-                    $$ = new IntValue($1.intVal);
+                    $$ = new IntValue($1);
                 }
                 |   VALUE_STRING
                 {
-                    $$ = new StringValue($1.stringVal);
+                    $$ = new StringValue($1);
                 }
 	            |   NULL
 	            {
@@ -270,15 +351,20 @@ Value           :   VALUE_INT
 
 DbName          :   IDENTIFIER
                 {
-                    $$ = $1;
+                    $$ = (Identifier*) $1;
                 }
 
 TbName          :   IDENTIFIER
                 {
-                    $$ = $1;
+                    $$ = (Identifier*) $1;
                 }
 
 ColName         :   IDENTIFIER
                 {
-                    $$ = $1;
+                    $$ = (Identifier*) $1;
                 }
+
+%%
+
+int yyparse(void);
+int yylex(void);

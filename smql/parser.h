@@ -1,4 +1,4 @@
-#define VALUE_INT 257
+#define VALUE_INTEGER 257
 #define VALUE_STRING 258
 #define IDENTIFIER 259
 #define EQ 260
@@ -38,7 +38,7 @@
 #define FLOAT 294
 #define FOREIGN 295
 #define REFERENCES 296
-#define NQ 297
+#define EOF 297
 typedef union{
     int intVal;
     char *stringVal;

@@ -1,7 +1,12 @@
 %{
+#include <iostream>
 #include <cstring>
 #include "Tree.h"
 #include "parser.h"  // 由YACC自动生成
+
+using namespace std;
+
+static char *copy_string(char *s, int len);
 %}
 
 %%
@@ -93,6 +98,7 @@
 									yylval.stringVal = copy_string(yytext, yyleng);
 									return VALUE_STRING;
 								}
+
 %%
 
 // 复制串

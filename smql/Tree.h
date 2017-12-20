@@ -18,22 +18,35 @@ class Type;
 class Value;
 class Stmt;
 class Column;
+class Field;
 
 class Tree {
 public:
     // 定义Operator
-    static const int GE = 1;
-    static const int GT = GE + 1;
-    static const int EQ = GT + 1;
-    static const int LT = EQ + 1;
-    static const int LE = LT + 1;
-    static const int NE = LE + 1;
+    static const int OP_GE = 1;
+    static const int OP_GT = OP_GE + 1;
+    static const int OP_EQ = OP_GT + 1;
+    static const int OP_LT = OP_EQ + 1;
+    static const int OP_LE = OP_LT + 1;
+    static const int OP_NE = OP_LE + 1;
 
     std::list<Stmt*> stmtList;
     std::list<Column*> columnList;
     std::list<Identifier*> tableList;
     std::list<Value*> valueList;
     std::list<std::list<Value*>> valueLists;
+    std::list<Field*> fieldList;
+
+    /*
+    Tree() {
+        stmtList = new std::list<Stmt*>();
+        columnList = new std::list<Column*>();
+        tableList = new std::list<Identifier*>();
+        valueList = new std::list<Value*>();
+        valueLists = new std::list<std::list<Value*>>();
+        fieldList = new std::list<Field*>();
+    }
+     */
 };
 
 /**
@@ -155,18 +168,12 @@ public:
  * Field是什么呢？？
  */
 class Field: public Tree {
-protected:
-    Identifier* colName;
 public:
     enum kind {
-        NORMAL, NOT_NULL, PRIMARY
+        NORMAL, NOT_NULL, PRIMARY, FOREIGN
     };
 
-    explicit Field(Identifier* colName): colName(colName) { }
-
-    Identifier* getColName() const {
-        return colName;
-    }
+    explicit Field() = default;
 
     virtual kind getKind() const = 0;
 };
@@ -175,9 +182,10 @@ public:
 class NormalField: public Field {
 private:
     Type* type;
+    Identifier* colName;
 
 public:
-    NormalField(Identifier* colName, Type* type): Field(colName), type(type) { }
+    NormalField(Identifier* colName, Type* type): colName(colName), type(type) { }
 
     kind getKind() const override {
         return kind::NORMAL;
@@ -186,15 +194,20 @@ public:
     Type* getType() const {
         return type;
     }
+
+    Identifier* getColName() const {
+        return colName;
+    }
 };
 
 // <colName> <type> NOT NULL
 class NotNullField: public Field {
 private:
     Type* type;
+    Identifier* colName;
 
 public:
-    NotNullField(Identifier* colName, Type* type): Field(colName), type(type) { }
+    NotNullField(Identifier* colName, Type* type): colName(colName), type(type) { }
 
     kind getKind() const override {
         return kind::NOT_NULL;
@@ -203,15 +216,54 @@ public:
     Type* getType() const {
         return type;
     }
+
+    Identifier* getColName() const {
+        return colName;
+    }
 };
 
-// PRIMARY KEY '(' <colName> ')'
+// PRIMARY KEY '(' <colList> ')'
 class PrimaryField: public Field {
+private:
+    std::list<Column*>* columnList;
 public:
-    explicit PrimaryField(Identifier* colName): Field(colName) { }
+    explicit PrimaryField(std::list<Column*>* columnList): columnList(columnList) { }
+
+    std::list<Column*>* getColumnList() {
+        return columnList;
+    }
 
     kind getKind() const override {
         return kind::PRIMARY;
+    }
+};
+
+// 似乎是扩展功能
+// FOREIGN KEY '(' ColName ')' REFERENCES TbName '(' ColName ')'
+class ForeignField: public Field {
+private:
+    Identifier* tbName;
+    Identifier* colName;
+    Identifier* referredColName;
+
+public:
+    ForeignField(Identifier* colName, Identifier* tbName, Identifier* referredColName): colName(colName), tbName(tbName),
+                                                                                        referredColName(referredColName) { }
+
+    Identifier* getTbName() {
+        return tbName;
+    }
+
+    Identifier* getReferredColName() {
+        return referredColName;
+    };
+
+    Identifier* getColName() const {
+        return colName;
+    }
+
+    kind getKind() const override {
+        return kind::FOREIGN;
     }
 };
 
@@ -394,12 +446,12 @@ public:
 // <setClause> := <setClause> ',' <colName> '=' <value>
 class SetClause: public Clause {
 private:
-    std::list<SingleSetClause>* setClauseList;
+    std::list<SingleSetClause*>* setClauseList;
 
 public:
-    explicit SetClause(std::list<SingleSetClause>* setClauseList): setClauseList(setClauseList) { }
+    explicit SetClause(std::list<SingleSetClause*>* setClauseList): setClauseList(setClauseList) { }
 
-    std::list<SingleSetClause>* getSetClauseList() {
+    std::list<SingleSetClause*>* getSetClauseList() {
         return setClauseList;
     }
 };
@@ -495,10 +547,10 @@ public:
 class CreateTbStmt: public TbStmt {
 private:
     Identifier* dbName;
-    std::list<Field>* fieldList;
+    std::list<Field*>* fieldList;
 
 public:
-    CreateTbStmt(Identifier* dbName, std::list<Field>* fieldList): dbName(dbName), fieldList(fieldList) { }
+    CreateTbStmt(Identifier* dbName, std::list<Field*>* fieldList): dbName(dbName), fieldList(fieldList) { }
 
     kind getKind() const override {
         return kind::CREATE;
@@ -508,7 +560,7 @@ public:
         return dbName;
     }
 
-    std::list<Field>* getFieldList() {
+    std::list<Field*>* getFieldList() {
         return fieldList;
     }
 };
@@ -551,10 +603,10 @@ public:
 class InsertTbStmt: public TbStmt {
 private:
     Identifier* dbName;
-    std::list<Value>* valueList;
+    std::list<Value*>* valueList;
 
 public:
-    InsertTbStmt(Identifier* dbName, std::list<Value>* valueList): dbName(dbName), valueList(valueList) { }
+    InsertTbStmt(Identifier* dbName, std::list<Value*>* valueList): dbName(dbName), valueList(valueList) { }
 
     kind getKind() const override {
         return kind::CREATE;
@@ -564,7 +616,7 @@ public:
         return dbName;
     }
 
-    std::list<Value>* getValueList() {
+    std::list<Value*>* getValueList() {
         return valueList;
     }
 };
@@ -624,14 +676,26 @@ public:
 // <selector>  := '*' | <col> [',' <col>]*
 class SelectTbStmt: public TbStmt {
 private:
-    std::list<Column>* selector; // 为null时表示*
-    std::list<Identifier>* tableList;
+    std::list<Column*>* selector; // 为null时表示*
+    std::list<Identifier*>* tableList;
     WhereClause* whereClause;
 
 public:
-    SelectTbStmt(std::list<Column>* selector, std::list<Identifier>* tableList, WhereClause* whereClause): selector(selector),
+    SelectTbStmt(std::list<Column*>* selector, std::list<Identifier*>* tableList, WhereClause* whereClause): selector(selector),
                                                                                                            tableList(tableList),
                                                                                                            whereClause(whereClause) { }
+
+    std::list<Column*>* getSelector() {
+        return selector;
+    }
+
+    std::list<Identifier*>* getTableList() {
+        return tableList;
+    }
+
+    WhereClause* getWhereClause() {
+        return whereClause;
+    }
 
     kind getKind() const override {
         return kind::SELECT;
