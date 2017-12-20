@@ -480,7 +480,7 @@ static yyconst short int yy_chk[335] =
 #define INITIAL 0
 #line 2 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 #include <cstring>
-#include "parser.cc"  // 由YACC自动生成
+#include "parser.h"  // 由YACC自动生成
 #line 485 "lex.yy.cc"
 
 /* Macros after this point can all be overridden by user definitions in
@@ -1038,32 +1038,35 @@ case 69:
 YY_RULE_SETUP
 #line 78 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 {
+                                    // 标识符
 									yylval.sval = copy_string(yytext, yyleng);
 									return IDENTIFIER;
 								}
 	YY_BREAK
 case 70:
 YY_RULE_SETUP
-#line 83 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 84 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 {
+                                    // 整数
 									yylval.ival = atoi(yytext);
 									return VALUE_INTEGER;
 								}
 	YY_BREAK
 case 71:
 YY_RULE_SETUP
-#line 88 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 90 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 {
+                                    // string
 									yylval.sval = copy_string(yytext, yyleng);
 									return VALUE_STRING;
 								}
 	YY_BREAK
 case 72:
 YY_RULE_SETUP
-#line 92 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 95 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 ECHO;
 	YY_BREAK
-#line 1067 "lex.yy.cc"
+#line 1070 "lex.yy.cc"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1870,6 +1873,6 @@ int main()
 	return 0;
 	}
 #endif
-#line 92 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
+#line 95 "C:/Users/lenovo/Documents/GitHub/db/smql/lexer.l"
 
 #include "scanhelp.c"

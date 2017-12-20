@@ -17,7 +17,8 @@ set(YACC_EXECUTABLE ${LIB_DIR}/byacc/yacc)
 set(FlexInput ${CMAKE_CURRENT_SOURCE_DIR}/${SMQL_DIR}/lexer.l)
 set(YACCInput ${CMAKE_CURRENT_SOURCE_DIR}/${SMQL_DIR}/parser.y)
 set(FlexOutput ${CMAKE_CURRENT_SOURCE_DIR}/${SMQL_DIR}/lexer.cc)
-set(YACCOutput ${CMAKE_CURRENT_SOURCE_DIR}/${SMQL_DIR}/parser.cc)
+set(YACCOutputHeader ${CMAKE_CURRENT_SOURCE_DIR}/${SMQL_DIR}/parser.h)
+set(YACCOutputSource ${CMAKE_CURRENT_SOURCE_DIR}/${SMQL_DIR}/parser.cc)
 ADD_CUSTOM_COMMAND(
         OUTPUT ${FlexOutput}
         COMMAND ${FLEX_EXECUTABLE} ${FlexInput}
@@ -25,7 +26,7 @@ ADD_CUSTOM_COMMAND(
         COMMENT "Generating lexer.cc"
 )
 ADD_CUSTOM_COMMAND(
-        OUTPUT ${YACCOutput}
+        OUTPUT ${YACCOutputHeader} ${YACCOutputSource}
         COMMAND ${YACC_EXECUTABLE} -d ${YACCInput}
         COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/rename_yacc
         COMMENT "Generating parser.cc"
@@ -38,7 +39,7 @@ set(SOURCE_FILES main.cpp
         ${RM_DIR}/rm_error.cc ${RM_DIR}/rm_filehandle.cc ${RM_DIR}/rm_filescan.cc ${RM_DIR}/rm_manager.cc
             ${RM_DIR}/rm_record.cc ${RM_DIR}/rm_rid.cc
         ${IX_DIR}/ix_indexhandle.cc ${IX_DIR}/ix_indexscan.cc ${IX_DIR}/ix_manager.cc
-        ${FlexOutput} ${YACCOutput}
+        ${FlexOutput} ${YACCOutputSource}
         ${SMQL_DIR}/Tree.cpp)
 
 add_executable(mydb ${SOURCE_FILES})

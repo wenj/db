@@ -1,12 +1,22 @@
+%{
+#include "Tree.h"
+%}
+
 %start Program
 
 %union{
-    int ival;
-    CompOp cval;
-    float rval;
-    char *sval;
-    Tree *n;
+    int intVal;
+    char *stringVal;
+    Tree::Op *opVal;
+    Tree::Identifier *identVal;
+    Tree *tree;
 }
+
+/* 抄的，我也不明白这些在干什么 */
+%token <ival> VALUE_INT
+%token <sval> VALUE_STRING
+%type <cval> Op
+%type <tree> Program Stmt SysStmt DbStmt TbStmt IdxStmt Field Type WhereClause SetClause
 
 %token EQ
 %token NE
@@ -25,21 +35,42 @@
 
 Program         :   /* empty */
 			    {
+			        $$.tree = new Tree();
+			        $$.tree->stmtList = new std::list<Stmt*>();
 			    }
 			    |   Program Stmt
 			    {
+			        $$.tree->stmtList->push_back($2);
 			    }
 			    ;
 
 Stmt            :   SysStmt ';'
+                {
+                    $$.tree = $1.tree;
+                }
 	            |   DbStmt ';'
+	            {
+                    $$.tree = $1.tree;
+                }
 	            |   TbStmt ';'
+	            {
+                    $$.tree = $1.tree;
+                }
 	            |   IdxStmt ';'
+	            {
+                    $$.tree = $1.tree;
+                }
 	            ;
 
 SysStmt         :   SHOW DATABASES
+                {
+                    $$.tree = new SysStmt();
+                }
 
 DbStmt          :   CREATE DATABASE DbName
+                {
+                    $$.tree = new DbStmt((Identifier*) $3.tree);
+                }
 	            |   DROP DATABASE DbName
 	            |   USE DbName
 	            |   SHOW TABLES
@@ -129,6 +160,9 @@ ColumnList      :   ColName
 		        ;
 
 DbName          :   IDENTIFIER
+                {
+                    $$.tree = new Identifier();
+                }
 
 TbName          :   IDENTIFIER
 

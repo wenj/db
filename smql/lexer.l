@@ -1,6 +1,6 @@
 %{
 #include <cstring>
-#include "parser.cc"  // 由YACC自动生成
+#include "parser.h"  // 由YACC自动生成
 %}
 
 %%
@@ -76,17 +76,20 @@
 "<>"                            { return NE; }
 
 [A-Za-z][_0-9A-Za-z]*			{
-									yylval.sval = copy_string(yytext, yyleng);
+                                    // 标识符
+									yylval.identVal = copy_string(yytext, yyleng);
 									return IDENTIFIER;
 								}
 
 [0-9]+							{
-									yylval.ival = atoi(yytext);
+                                    // 整数
+									yylval.intVal = atoi(yytext);
 									return VALUE_INTEGER;
 								}
 
 '[^']*'							{
-									yylval.sval = copy_string(yytext, yyleng);
+                                    // string
+									yylval.stringVal = copy_string(yytext, yyleng);
 									return VALUE_STRING;
 								}
 %%
