@@ -59,7 +59,7 @@ public:
         IndentOstream::incIndent();
         auto i = stmtList.begin();
         while (i != stmtList.end()) {
-            (*i)->print();
+            ((Tree*) (*i))->print();
             i++;
         }
         IndentOstream::decIndent();
@@ -93,6 +93,69 @@ public:
     }
 };
 
+// <table>  := <tbName>
+class Table: public Tree {
+private:
+    Identifier* tbName;
+
+public:
+    explicit Table(Identifier* tbName): tbName(tbName) { }
+
+    Identifier* getTbName() {
+        return tbName;
+    }
+
+    void print() override {
+        IndentOstream::write("Table: ");
+        IndentOstream::write(tbName->getName());
+    }
+};
+
+// <column>  := <colName>
+class Column: public Tree {
+private:
+    Identifier* colName;
+
+public:
+    explicit Column(Identifier* colName): colName(colName) { }
+
+    Identifier* getColName() {
+        return colName;
+    }
+
+    void print() override {
+        IndentOstream::write("Column: ");
+        IndentOstream::write(colName->getName());
+    }
+};
+
+// <tabledColumn>  := <table> '.' <column>
+class TabledColumn: public Tree {
+private:
+    Table* table;
+    Column* column;
+
+public:
+    explicit TabledColumn(Column* column): table(nullptr), column(column) { }
+
+    explicit TabledColumn(Table* table, Column* column): table(table), column(column) { }
+
+    Table* getTable() {
+        return table;
+    }
+
+    Column* getColumn() {
+        return column;
+    }
+
+    void print() override {
+        IndentOstream::write("TabledColumn: ");
+        IndentOstream::incIndent();
+        table->print();
+        column->print();
+    }
+};
+
 /**
  * 类型
  */
@@ -117,6 +180,10 @@ public:
     kind getKind() const override {
         return kind::INT;
     }
+
+    void print() override {
+        IndentOstream::write("type int");
+    }
 };
 
 class VarcharType: public Type {
@@ -125,6 +192,10 @@ public:
 
     kind getKind() const override {
         return kind::VARCHAR;
+    }
+
+    void print() override {
+        IndentOstream::write("type varchar");
     }
 };
 
@@ -151,6 +222,11 @@ public:
     kind getKind() const override {
         return kind::INT;
     }
+
+    void print() override {
+        IndentOstream::writeAppend("value int ");
+        IndentOstream::write(value);
+    }
 };
 
 class StringValue: public Value {
@@ -170,6 +246,13 @@ public:
     kind getKind() const override {
         return kind::INT;
     }
+
+    void print() override {
+        IndentOstream::writeAppend("value string ");
+        IndentOstream::writeAppend("\'");
+        IndentOstream::writeAppend(value);
+        IndentOstream::writeAppend("\'");
+    }
 };
 
 class NullValue: public Value {
@@ -178,6 +261,10 @@ public:
 
     kind getKind() const override {
         return kind::NULL_VALUE;
+    }
+
+    void print() override {
+        IndentOstream::write("value NULL");
     }
 };
 
@@ -215,6 +302,14 @@ public:
     Column* getColumn() const {
         return column;
     }
+
+    void print() override {
+        IndentOstream::write("Field");
+        IndentOstream::incIndent();
+        type->print();
+        column->print();
+        IndentOstream::decIndent();
+    }
 };
 
 // <column> <type> NOT NULL
@@ -237,21 +332,41 @@ public:
     Column* getColumn() const {
         return column;
     }
+
+    void print() override {
+        IndentOstream::write("Field not null");
+        IndentOstream::incIndent();
+        type->print();
+        column->print();
+        IndentOstream::decIndent();
+    }
 };
 
 // PRIMARY KEY '(' <colList> ')'
 class PrimaryField: public Field {
 private:
-    std::list<Column*>* columnList;
+    list<Column*>* columnList;
 public:
     explicit PrimaryField(std::list<Column*>* columnList): columnList(columnList) { }
 
-    std::list<Column*>* getColumnList() {
+    list<Column*>* getColumnList() {
         return columnList;
     }
 
     kind getKind() const override {
         return kind::PRIMARY;
+    }
+
+    void print() override {
+        IndentOstream::write("Field Primary");
+        IndentOstream::incIndent();
+        IndentOstream::write("Column List");
+        IndentOstream::incIndent();
+        for (auto i = columnList->begin(); i != columnList->end(); i++) {
+            ((Column*) (*i))->print();
+        }
+        IndentOstream::decIndent();
+        IndentOstream::decIndent();
     }
 };
 
@@ -278,6 +393,15 @@ public:
     kind getKind() const override {
         return kind::FOREIGN;
     }
+
+    void print() override {
+        IndentOstream::write("Field Foreign Key");
+        IndentOstream::incIndent();
+        column->print();
+        table->print();
+        referredColumn->print();
+        IndentOstream::decIndent();
+    }
 };
 
 // <database>  := <dbName>
@@ -291,51 +415,10 @@ public:
     Identifier* getDbName() {
         return dbName;
     }
-};
 
-// <table>  := <tbName>
-class Table: public Tree {
-private:
-    Identifier* tbName;
-
-public:
-    explicit Table(Identifier* tbName): tbName(tbName) { }
-
-    Identifier* getTbName() {
-        return tbName;
-    }
-};
-
-// <column>  := <colName>
-class Column: public Tree {
-private:
-    Identifier* colName;
-
-public:
-    explicit Column(Identifier* colName): colName(colName) { }
-
-    Identifier* getColName() {
-        return colName;
-    }
-};
-
-// <tabledColumn>  := <table> '.' <column>
-class TabledColumn: public Tree {
-private:
-    Table* table;
-    Column* column;
-
-public:
-    explicit TabledColumn(Column* column): table(nullptr), column(column) { }
-
-    explicit TabledColumn(Table* table, Column* column): table(table), column(column) { }
-
-    Table* getTable() {
-        return table;
-    }
-
-    Column* getColumn() {
-        return column;
+    void print() override {
+        IndentOstream::write("Database: ");
+        IndentOstream::write(dbName->getName());
     }
 };
 
@@ -349,6 +432,24 @@ public:
 
     int getOp() const {
         return op;
+    }
+
+    void print() override {
+        IndentOstream::writeAppend("Op: ");
+        if (op == Tree::OP_EQ)
+            IndentOstream::write("=");
+        else if (op == Tree::OP_GE)
+            IndentOstream::write(">=");
+        else if (op == Tree::OP_GT)
+            IndentOstream::write(">");
+        else if (op == Tree::OP_LE)
+            IndentOstream::write("<=");
+        else if (op == Tree::OP_LT)
+            IndentOstream::write("<");
+        else if (op == Tree::OP_NE)
+            IndentOstream::write("<>");
+        else
+            IndentOstream::write("error");
     }
 };
 
@@ -376,6 +477,13 @@ public:
     kind getKind() const override {
         return kind::VALUE;
     }
+
+    void print() override {
+        IndentOstream::write("ValueExpr: ");
+        IndentOstream::incIndent();
+        value->print();
+        IndentOstream::decIndent();
+    }
 };
 
 class ColExpr: public Expr {
@@ -391,6 +499,13 @@ public:
 
     kind getKind() const override {
         return kind::COL;
+    }
+
+    void print() override {
+        IndentOstream::write("ColExpr: ");
+        IndentOstream::incIndent();
+        column->print();
+        IndentOstream::decIndent();
     }
 };
 
@@ -433,6 +548,15 @@ public:
     kind getKind() const override {
         return kind::NORMAL;
     }
+
+    void print() override {
+        IndentOstream::write("WhereClause: ");
+        IndentOstream::incIndent();
+        column->print();
+        op->print();
+        expr->print();
+        IndentOstream::decIndent();
+    }
 };
 
 // <whereClause>  := <col> IS [NOT] NULL
@@ -455,6 +579,15 @@ public:
     kind getKind() const override {
         return kind::IS_NULL;
     }
+
+    void print() override {
+        IndentOstream::write("WhereClause: ");
+        IndentOstream::incIndent();
+        column->print();
+        if (hasNot)
+            IndentOstream::write("NOT");
+        IndentOstream::decIndent();
+    }
 };
 
 // <whereClause>  := <whereClause> AND <whereClause>
@@ -475,6 +608,14 @@ public:
     kind getKind() const override {
         return kind::AND;
     }
+
+    void print() override {
+        IndentOstream::write("WhereClause: ");
+        IndentOstream::incIndent();
+        whereClause[0]->print();
+        whereClause[1]->print();
+        IndentOstream::decIndent();
+    }
 };
 
 // <setClause>  := <column> '=' <value>
@@ -493,18 +634,35 @@ public:
     Value* getValue() {
         return value;
     }
+
+    void print() override {
+        IndentOstream::write("SetClause: ");
+        IndentOstream::incIndent();
+        column->print();
+        value->print();
+        IndentOstream::decIndent();
+    }
 };
 
 // <setClause> := <setClause> ',' <colName> '=' <value>
 class SetClause: public Clause {
 private:
-    std::list<SingleSetClause*>* setClauseList;
+    list<SingleSetClause*>* setClauseList;
 
 public:
-    explicit SetClause(std::list<SingleSetClause*>* setClauseList): setClauseList(setClauseList) { }
+    explicit SetClause(list<SingleSetClause*>* setClauseList): setClauseList(setClauseList) { }
 
-    std::list<SingleSetClause*>* getSetClauseList() {
+    list<SingleSetClause*>* getSetClauseList() {
         return setClauseList;
+    }
+
+    void print() override {
+        IndentOstream::write("SetClauseList: ");
+        IndentOstream::incIndent();
+        for (auto &i : *setClauseList) {
+            ((SingleSetClause*) i)->print();
+        }
+        IndentOstream::decIndent();
     }
 };
 
@@ -681,6 +839,7 @@ public:
         IndentOstream::write("DropTbStmt: Drop Table");
         IndentOstream::incIndent();
         table->print();
+        IndentOstream::decIndent();
     }
 };
 
@@ -698,6 +857,13 @@ public:
 
     Table* getTable() const {
         return table;
+    }
+
+    void print() override {
+        IndentOstream::write("DescTbStmt");
+        IndentOstream::incIndent();
+        table->print();
+        IndentOstream::decIndent();
     }
 };
 
@@ -721,6 +887,16 @@ public:
     std::list<Value*>* getValueList() {
         return valueList;
     }
+
+    void print() override {
+        IndentOstream::write("InsertTbStmt");
+        IndentOstream::incIndent();
+        table->print();
+        for (auto &i : *valueList) {
+            ((Value*) i)->print();
+        }
+        IndentOstream::decIndent();
+    }
 };
 
 // DELETE FROM <tbName> WHERE <whereClause>
@@ -743,9 +919,17 @@ public:
     kind getKind() const override {
         return kind::DELETE;
     }
+
+    void print() override {
+        IndentOstream::write("DeleteTbStmt");
+        IndentOstream::incIndent();
+        table->print();
+        whereClause->print();
+        IndentOstream::decIndent();
+    }
 };
 
-// UPDATE <tbName> SET <setClause> WHERE <whereClause>
+// UPDATE <table> SET <setClause> WHERE <whereClause>
 class UpdateTbStmt: public TbStmt {
 private:
     Table* table;
@@ -771,6 +955,15 @@ public:
 
     kind getKind() const override {
         return kind::UPDATE;
+    }
+
+    void print() override {
+        IndentOstream::write("UpdateTbStmt");
+        IndentOstream::incIndent();
+        table->print();
+        setClause->print();
+        whereClause->print();
+        IndentOstream::decIndent();
     }
 };
 
@@ -801,6 +994,21 @@ public:
 
     kind getKind() const override {
         return kind::SELECT;
+    }
+
+    void print() override {
+        IndentOstream::write("SelectTbStmt");
+        IndentOstream::incIndent();
+        IndentOstream::write("Selector");
+        for (auto &i : *selector) {
+            ((Column*) i)->print();
+        }
+        IndentOstream::write("TableList");
+        for (auto &i : *tableList) {
+            ((Table*) i)->print();
+        }
+        whereClause->print();
+        IndentOstream::decIndent();
     }
 };
 
@@ -835,6 +1043,14 @@ public:
     kind getKind() const override {
         return kind::CREATE;
     }
+
+    void print() override {
+        IndentOstream::write("CreateIdxStmt");
+        IndentOstream::incIndent();
+        table->print();
+        column->print();
+        IndentOstream::decIndent();
+    }
 };
 
 // <idxStmt>  := DROP INDEX <tbName> '(' <colName> ')'
@@ -844,6 +1060,14 @@ public:
 
     kind getKind() const override {
         return kind::DROP;
+    }
+
+    void print() override {
+        IndentOstream::write("DropIdxStmt");
+        IndentOstream::incIndent();
+        table->print();
+        column->print();
+        IndentOstream::decIndent();
     }
 };
 

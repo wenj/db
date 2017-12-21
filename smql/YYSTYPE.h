@@ -20,7 +20,7 @@ typedef union {
 struct PF_Manager typedef PF_Manager;
 struct SM_Manager typedef SM_Manager;
 
-void Parse(PF_Manager* pfm, SM_Manager* smm);
+void Parse();
 
 void yyerror(char const *s);
 

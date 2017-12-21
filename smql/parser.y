@@ -30,8 +30,8 @@
 %type       <identVal>      DbName          TbName          ColName
 %type       <tree>          Program         Stmt            SysStmt         DbStmt          TbStmt          IdxStmt
                             Field           Type            WhereClause     SetClause       SingleSetClause Value
-                            ValueList       ValueLists      Selector        ColumnList      TableList       IDENTIFIER
-                            Expr            Column          FieldList
+                            ValueList       ValueLists      Selector        ColumnList      TableList       Database
+                            Expr            Column          FieldList       Table           TabledColumn
 
 %token EQ
 %token NE
@@ -88,15 +88,15 @@ SysStmt         :   SHOW DATABASES
 
 DbStmt          :   CREATE DATABASE Database
                 {
-                    $$ = new CreateDbStmt($3);
+                    $$ = new CreateDbStmt((Database*) $3);
                 }
 	            |   DROP DATABASE Database
 	            {
-	                $$ = new DropDbStmt($3);
+	                $$ = new DropDbStmt((Database*) $3);
 	            }
 	            |   USE Database
 	            {
-	                $$ = new UseDbStmt($2);
+	                $$ = new UseDbStmt((Database*) $2);
 	            }
 	            |   SHOW TABLES
 	            {
@@ -106,27 +106,27 @@ DbStmt          :   CREATE DATABASE Database
 
 TbStmt          :   CREATE TABLE Table '(' FieldList ')'
                 {
-                    $$ = new CreateTbStmt($3, &$5->fieldList);
+                    $$ = new CreateTbStmt((Table*) $3, &$5->fieldList);
                 }
                 |   DROP TABLE Table
                 {
-                    $$ = new DropTbStmt($3);
+                    $$ = new DropTbStmt((Table*) $3);
                 }
 	            |   DESC Table
 	            {
-	                $$ = new DescTbStmt($2);
+	                $$ = new DescTbStmt((Table*) $2);
 	            }
 	            |   INSERT INTO Table VALUES ValueLists
 	            {
-	                $$ = new InsertTbStmt($3, &$5->valueList);
+	                $$ = new InsertTbStmt((Table*) $3, &$5->valueList);
 	            }
 	            |   DELETE FROM Table WHERE WhereClause
 	            {
-	                $$ = new DeleteTbStmt($3, (WhereClause*) $5);
+	                $$ = new DeleteTbStmt((Table*) $3, (WhereClause*) $5);
 	            }
 	            |   UPDATE Table SET SetClause WHERE WhereClause
 	            {
-	                $$ = new UpdateTbStmt($2, (SetClause*) $4, (WhereClause*) $6);
+	                $$ = new UpdateTbStmt((Table*) $2, (SetClause*) $4, (WhereClause*) $6);
 	            }
 	            |   SELECT Selector FROM TableList WHERE WhereClause
 	            {
@@ -136,11 +136,11 @@ TbStmt          :   CREATE TABLE Table '(' FieldList ')'
 
 IdxStmt         :   CREATE INDEX Table '(' Column ')'
                 {
-                    $$ = new CreateIdxStmt($3, $5);
+                    $$ = new CreateIdxStmt((Table*) $3, (Column*) $5);
                 }
                 |   DROP INDEX Table '(' Column ')'
                 {
-                    $$ = new DropIdxStmt($3, $5);
+                    $$ = new DropIdxStmt((Table*) $3, (Column*) $5);
                 }
 		        ;
 
@@ -169,9 +169,9 @@ Field           :   Column Type
 	            {
 	                $$ = new PrimaryField(&($4->columnList));
 	            }
-	            |   FOREIGN KEY '(' Column ')' REFERENCES TbName '(' ColName ')'  /* TODO: 这应该也是扩展功能，随便加上了 */
+	            |   FOREIGN KEY '(' Column ')' REFERENCES Table '(' Column ')'  /* TODO: 这应该也是扩展功能，随便加上了 */
 	            {
-	                $$ = new ForeignField($4, $7, $9);
+	                $$ = new ForeignField((Column*) $4, (Table*) $7, (Column*) $9);
 	            }
 	            ;
 
@@ -260,9 +260,9 @@ SetClause       :   SingleSetClause
 		        }
 		        ;
 
-SingleSetClause :   ColName EQ Value
+SingleSetClause :   Column EQ Value
                 {
-                    $$ = new SingleSetClause($1, (Value*) $3);
+                    $$ = new SingleSetClause((Column*) $1, (Value*) $3);
                 }
 
 Selector        :   '*'
@@ -279,13 +279,13 @@ Selector        :   '*'
 TableList       :   Table
                 {
                     $$ = new Tree();
-                    $$->tableList.push_back($1);
+                    $$->tableList.push_back((Table*) $1);
                 }
 		        |   TableList ',' Table
 		        {
 		            $$ = new Tree();
 		            $$->tableList.insert($$->tableList.end(), $1->tableList.begin(), $1->tableList.end());
-		            $$->tableList.push_back($3);
+		            $$->tableList.push_back((Table*) $3);
 		        }
 		        ;
 
@@ -302,12 +302,12 @@ ColumnList      :   Column
 		        }
 		        ;
 
-Database        :   Dbname
+Database        :   DbName
                 {
                     $$ = new Database($1);
                 }
 
-Table           :   Tbname
+Table           :   TbName
                 {
                     $$ = new Table($1);
                 }
@@ -322,11 +322,11 @@ Column          :   ColName
 /* 可能带table的列 */
 TabledColumn    :   Column
                 {
-                    $$ = new TableColumn($1);
+                    $$ = new TabledColumn((Column*) $1);
                 }
-                :   Table '.' Column
+                |   Table '.' Column
                 {
-                    $$ = new TabledColumn($1, $3);
+                    $$ = new TabledColumn((Table*) $1, (Column*) $3);
                 }
                 ;
 
@@ -394,16 +394,9 @@ extern "C" {
 
 // 以下是抄来的
 
-void Parse(PF_Manager* pfm, SM_Manager* smm)
+void Parse()
 {
-    RC rc;
-
     static const char* PROMPT = "\nDATABASE << ";
-
-    // Set up global variables to their defaults
-    pPfm  = &pfm;
-    pSmm  = &smm;
-    pQlm  = &qlm;
 
     /* Do forever */
     while (true) {
@@ -414,10 +407,14 @@ void Parse(PF_Manager* pfm, SM_Manager* smm)
         /* Get the prompt to actually show up on the screen */
         cout.flush();
 
+        int i = yyparse();
+
         /* If a query was successfully read, interpret it */
-        if(yyparse() == 0 && yyval.tree != nullptr) {
+        if(i == 0 && yyval.tree != nullptr) {
             yyval.tree->print();
         }
+
+        cout << "处理完了" << endl;
     }
 }
 

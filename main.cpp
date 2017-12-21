@@ -10,11 +10,11 @@
 PF_Manager pfm;
 RM_Manager rmm(pfm);
 IX_Manager ixm(pfm);
-SM_Manager smm(ixm, rmm);
+// SM_Manager smm(ixm, rmm);
 // QL_Manager qlm(smm, ixm, rmm);
 
 int main() {
     std::cout << "我是一个数据库" << std::endl;
-    Parse(&pfm, &smm);
+    Parse();
     return 0;
 }
