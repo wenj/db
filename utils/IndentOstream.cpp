@@ -3,3 +3,7 @@
 //
 
 #include "IndentOstream.h"
+
+int IndentOstream::indent = 0;
+string IndentOstream::indent_str;
+string IndentOstream::tab = "    ";

@@ -17,4 +17,13 @@ typedef union {
     Tree *tree;
 } YYSTYPE;
 
+struct PF_Manager typedef PF_Manager;
+struct SM_Manager typedef SM_Manager;
+
+void Parse(PF_Manager* pfm, SM_Manager* smm);
+
+void yyerror(char const *s);
+
+int yywrap(void);
+
 #endif //MYDB_YYSTYPE_H

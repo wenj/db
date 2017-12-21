@@ -394,34 +394,31 @@ extern "C" {
 
 // 以下是抄来的
 
-void Parse(PF_Manager &pfm, SM_Manager &smm, QL_Manager &qlm)
+void Parse(PF_Manager* pfm, SM_Manager* smm)
 {
-   RC rc;
+    RC rc;
 
-   static const char* PROMPT = "\nDATABASE << ";
+    static const char* PROMPT = "\nDATABASE << ";
 
-   // Set up global variables to their defaults
-   pPfm  = &pfm;
-   pSmm  = &smm;
-   pQlm  = &qlm;
+    // Set up global variables to their defaults
+    pPfm  = &pfm;
+    pSmm  = &smm;
+    pQlm  = &qlm;
 
-   /* Do forever */
-   while (true) {
+    /* Do forever */
+    while (true) {
 
-      /* Print a prompt */
-      cout << PROMPT;
+        /* Print a prompt */
+        cout << PROMPT;
 
-      /* Get the prompt to actually show up on the screen */
-      cout.flush();
+        /* Get the prompt to actually show up on the screen */
+        cout.flush();
 
-      /* If a query was successfully read, interpret it */
-      if(yyparse() == 0 && yyval.tree != nullptr)
-         if ((rc = interp(parse_tree))) {
-            PrintError(rc);
-            if (rc < 0)
-               bExit = TRUE;
-         }
-   }
+        /* If a query was successfully read, interpret it */
+        if(yyparse() == 0 && yyval.tree != nullptr) {
+            yyval.tree->print();
+        }
+    }
 }
 
 /*

@@ -9,6 +9,10 @@
 #include <utility>
 #include <cstring>
 
+#include "IndentOstream.h"
+
+using namespace std;
+
 /**
  * 现在的问题之一是要用指针来指一切……
  */
@@ -31,12 +35,12 @@ public:
     static const int OP_LE;
     static const int OP_NE;
 
-    std::list<Stmt*> stmtList;
-    std::list<Column*> columnList;
-    std::list<Table*> tableList;
-    std::list<Value*> valueList;
-    std::list<std::list<Value*>> valueLists;
-    std::list<Field*> fieldList;
+    list<Stmt*> stmtList;
+    list<Column*> columnList;
+    list<Table*> tableList;
+    list<Value*> valueList;
+    list<std::list<Value*>> valueLists;
+    list<Field*> fieldList;
 
     /*
     Tree() {
@@ -48,6 +52,18 @@ public:
         fieldList = new std::list<Field*>();
     }
      */
+
+    // Print the program
+    virtual void print() {
+        IndentOstream::write("program");
+        IndentOstream::incIndent();
+        auto i = stmtList.begin();
+        while (i != stmtList.end()) {
+            (*i)->print();
+            i++;
+        }
+        IndentOstream::decIndent();
+    }
 };
 
 /**
@@ -240,27 +256,23 @@ public:
 };
 
 // 似乎是扩展功能
-// FOREIGN KEY '(' ColName ')' REFERENCES TbName '(' ColName ')'
+// FOREIGN KEY '(' <column> ')' REFERENCES <table> '(' <column> ')'
 class ForeignField: public Field {
 private:
-    Identifier* tbName;
-    Identifier* colName;
-    Identifier* referredColName;
+    Column* column;
+    Table* table;
+    Column* referredColumn;
 
 public:
-    ForeignField(Identifier* colName, Identifier* tbName, Identifier* referredColName): colName(colName), tbName(tbName),
-                                                                                        referredColName(referredColName) { }
+    ForeignField(Column* column, Table* table, Column* referredColumn): column(column), table(table),
+                                                                        referredColumn(referredColumn) { }
 
-    Identifier* getTbName() {
-        return tbName;
+    Column* getColumn() {
+        return column;
     }
 
-    Identifier* getReferredColName() {
-        return referredColName;
-    };
-
-    Identifier* getColName() const {
-        return colName;
+    Table* getTable() {
+        return table;
     }
 
     kind getKind() const override {
@@ -472,10 +484,10 @@ private:
     Value* value;
 
 public:
-    explicit SingleSetClause(Identifier* colName, Value* value): colName(colName), value(value) { }
+    explicit SingleSetClause(Column* column, Value* value): column(column), value(value) { }
 
-    Identifier* getColName() {
-        return colName;
+    Column* getColumn() {
+        return column;
     }
 
     Value* getValue() {
@@ -505,6 +517,10 @@ class Stmt: public Tree {
 class SysStmt: public Stmt {
 public:
     SysStmt() = default;
+
+    void print() override {
+        IndentOstream::write("SysStmt: Show Database");
+    }
 };
 
 class DbStmt: public Stmt {
@@ -516,51 +532,72 @@ public:
     virtual kind getKind() const = 0;
 };
 
-// CREATE DATABASE <dbName>
+// CREATE DATABASE <database>
 class CreateDbStmt: public DbStmt {
 private:
-    Identifier* dbName;
+    Database* database;
 public:
-    explicit CreateDbStmt(Identifier* dbName): dbName(dbName) { }
+    explicit CreateDbStmt(Database* database): database(database) { }
 
     kind getKind() const override {
         return kind::CREATE;
     }
 
-    Identifier* getDbName() const {
-        return dbName;
+    Database* getDatabase() const {
+        return database;
+    }
+
+    void print() override {
+        IndentOstream::write("CreateDbStmt: Create Database");
+        IndentOstream::incIndent();
+        database->print();
+        IndentOstream::decIndent();
     }
 };
 
-// DROP DATABASE <dbName>
+// DROP DATABASE <database>
 class DropDbStmt: public DbStmt {
 private:
-    Identifier* dbName;
+    Database* database;
 public:
-    explicit DropDbStmt(Identifier* dbName): dbName(dbName) { }
+    explicit DropDbStmt(Database* database): database(database) { }
 
     kind getKind() const override {
         return kind::DROP;
     }
 
-    Identifier* getDbName() const {
-        return dbName;
+    Database* getDatabase() const {
+        return database;
+    }
+
+    void print() override {
+        IndentOstream::write("DropDbStmt: Drop Database");
+        IndentOstream::incIndent();
+        database->print();
+        IndentOstream::decIndent();
     }
 };
 
-// USE <dbName>
+// USE <database>
 class UseDbStmt: public DbStmt {
 private:
-    Identifier* dbName;
+    Database* database;
 public:
-    explicit UseDbStmt(Identifier* dbName): dbName(dbName) { }
+    explicit UseDbStmt(Database* database): database(database) { }
 
     kind getKind() const override {
         return kind::USE;
     }
 
-    Identifier* getDbName() const {
-        return dbName;
+    Database* getDatabase() const {
+        return database;
+    }
+
+    void print() override {
+        IndentOstream::write("UseDbStmt: Use Database");
+        IndentOstream::incIndent();
+        database->print();
+        IndentOstream::decIndent();
     }
 };
 
@@ -571,6 +608,10 @@ public:
 
     kind getKind() const override {
         return kind::SHOW_TABLE;
+    }
+
+    void print() override {
+        IndentOstream::write("ShowDbStmt: Show Tables");
     }
 };
 
@@ -587,7 +628,7 @@ public:
 class CreateTbStmt: public TbStmt {
 private:
     Table* table;
-    std::list<Field*>* fieldList;
+    list<Field*>* fieldList;
 
 public:
     CreateTbStmt(Table* table, std::list<Field*>* fieldList): table(table), fieldList(fieldList) { }
@@ -602,6 +643,21 @@ public:
 
     std::list<Field*>* getFieldList() {
         return fieldList;
+    }
+
+    void print() override {
+        IndentOstream::write("CreateTbStmt: Create Table");
+        IndentOstream::incIndent();
+        table->print();
+        IndentOstream::incIndent();
+        IndentOstream::write("FieldList");
+        IndentOstream::incIndent();
+        for (list<Field*>::iterator i; i != fieldList->end(); i++) {
+            (*i)->print();
+        }
+        IndentOstream::decIndent();
+        IndentOstream::decIndent();
+        IndentOstream::decIndent();
     }
 };
 
@@ -619,6 +675,12 @@ public:
 
     Table* getTable() const {
         return table;
+    }
+
+    void print() override {
+        IndentOstream::write("DropTbStmt: Drop Table");
+        IndentOstream::incIndent();
+        table->print();
     }
 };
 
@@ -744,22 +806,22 @@ public:
 
 class IdxStmt: public Stmt {
 protected:
-    Identifier* tbName;
-    Identifier* colName;
+    Table* table;
+    Column* column;
 
 public:
     enum kind {
         CREATE, DROP
     };
 
-    IdxStmt(Identifier* tbName, Identifier* colName): tbName(tbName), colName(colName) { }
+    IdxStmt(Table* table, Column* column): table(table), column(column) { }
 
-    Identifier* getTbName() {
-        return tbName;
+    Table* getTable() {
+        return table;
     }
 
-    Identifier* getColName() {
-        return colName;
+    Column* getColumn() {
+        return column;
     }
 
     virtual kind getKind() const = 0;
@@ -768,7 +830,7 @@ public:
 // <idxStmt>  := CREATE INDEX <table> '(' <column> ')'
 class CreateIdxStmt: public IdxStmt {
 public:
-    CreateIdxStmt(Identifier* tbName, Identifier* colName): IdxStmt(tbName, colName) { }
+    CreateIdxStmt(Table* table, Column* column): IdxStmt(table, column) { }
 
     kind getKind() const override {
         return kind::CREATE;
@@ -778,7 +840,7 @@ public:
 // <idxStmt>  := DROP INDEX <tbName> '(' <colName> ')'
 class DropIdxStmt: public IdxStmt {
 public:
-    DropIdxStmt(Identifier* tbName, Identifier* colName): IdxStmt(tbName, colName) { }
+    DropIdxStmt(Table* table, Column* column): IdxStmt(table, column) { }
 
     kind getKind() const override {
         return kind::DROP;
