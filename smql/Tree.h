@@ -18,6 +18,7 @@ class Type;
 class Value;
 class Stmt;
 class Column;
+class Table;
 class Field;
 
 class Tree {
@@ -32,7 +33,7 @@ public:
 
     std::list<Stmt*> stmtList;
     std::list<Column*> columnList;
-    std::list<Identifier*> tableList;
+    std::list<Table*> tableList;
     std::list<Value*> valueList;
     std::list<std::list<Value*>> valueLists;
     std::list<Field*> fieldList;
@@ -178,14 +179,14 @@ public:
     virtual kind getKind() const = 0;
 };
 
-// <colName> <type>
+// <column> <type>
 class NormalField: public Field {
 private:
     Type* type;
-    Identifier* colName;
+    Column* column;
 
 public:
-    NormalField(Identifier* colName, Type* type): colName(colName), type(type) { }
+    NormalField(Column* column, Type* type): column(column), type(type) { }
 
     kind getKind() const override {
         return kind::NORMAL;
@@ -195,19 +196,19 @@ public:
         return type;
     }
 
-    Identifier* getColName() const {
-        return colName;
+    Column* getColumn() const {
+        return column;
     }
 };
 
-// <colName> <type> NOT NULL
+// <column> <type> NOT NULL
 class NotNullField: public Field {
 private:
     Type* type;
-    Identifier* colName;
+    Column* column;
 
 public:
-    NotNullField(Identifier* colName, Type* type): colName(colName), type(type) { }
+    NotNullField(Column* column, Type* type): column(column), type(type) { }
 
     kind getKind() const override {
         return kind::NOT_NULL;
@@ -217,8 +218,8 @@ public:
         return type;
     }
 
-    Identifier* getColName() const {
-        return colName;
+    Column* getColumn() const {
+        return column;
     }
 };
 
@@ -267,23 +268,62 @@ public:
     }
 };
 
-// <col>  := [<tbName> '.'] <colName>
-class Column: public Tree {
+// <database>  := <dbName>
+class Database: public Tree {
 private:
-    Identifier* tbName;
-    Identifier* colName;
+    Identifier* dbName;
 
 public:
-    explicit Column(Identifier* tbName, Identifier* colName): tbName(tbName), colName(colName) { }
+    explicit Database(Identifier* dbName): dbName(dbName) { }
 
-    explicit Column(Identifier* colName): tbName(nullptr), colName(colName) { }
+    Identifier* getDbName() {
+        return dbName;
+    }
+};
+
+// <table>  := <tbName>
+class Table: public Tree {
+private:
+    Identifier* tbName;
+
+public:
+    explicit Table(Identifier* tbName): tbName(tbName) { }
 
     Identifier* getTbName() {
         return tbName;
     }
+};
+
+// <column>  := <colName>
+class Column: public Tree {
+private:
+    Identifier* colName;
+
+public:
+    explicit Column(Identifier* colName): colName(colName) { }
 
     Identifier* getColName() {
         return colName;
+    }
+};
+
+// <tabledColumn>  := <table> '.' <column>
+class TabledColumn: public Tree {
+private:
+    Table* table;
+    Column* column;
+
+public:
+    explicit TabledColumn(Column* column): table(nullptr), column(column) { }
+
+    explicit TabledColumn(Table* table, Column* column): table(table), column(column) { }
+
+    Table* getTable() {
+        return table;
+    }
+
+    Column* getColumn() {
+        return column;
     }
 };
 
@@ -359,14 +399,14 @@ public:
 // <whereClause>  := <col><op><expr>
 class NormalWhereClause: public WhereClause {
 private:
-    Column* column;
+    TabledColumn* column;
     Op* op;
     Expr* expr;
 
 public:
-    NormalWhereClause(Column* column, Op* op, Expr* expr): column(column), op(op), expr(expr) { }
+    NormalWhereClause(TabledColumn* column, Op* op, Expr* expr): column(column), op(op), expr(expr) { }
 
-    Column* getColumn() {
+    TabledColumn* getColumn() {
         return column;
     }
 
@@ -386,13 +426,13 @@ public:
 // <whereClause>  := <col> IS [NOT] NULL
 class IsNullWhereClause: public WhereClause {
 private:
-    Column* column;
+    TabledColumn* column;
     bool hasNot;
 
 public:
-    IsNullWhereClause(Column* column, bool hasNot): column(column), hasNot(hasNot) { }
+    IsNullWhereClause(TabledColumn* column, bool hasNot): column(column), hasNot(hasNot) { }
 
-    Column* getColumn() {
+    TabledColumn* getColumn() {
         return column;
     }
 
@@ -425,10 +465,10 @@ public:
     }
 };
 
-// <setClause>  := <colName> '=' <value>
+// <setClause>  := <column> '=' <value>
 class SingleSetClause: public Clause {
 private:
-    Identifier* colName;
+    Column* column;
     Value* value;
 
 public:
@@ -543,21 +583,21 @@ public:
     virtual kind getKind() const = 0;
 };
 
-// CREATE TABLE <tbName> '('<fieldList>')'
+// CREATE TABLE <table> '('<fieldList>')'
 class CreateTbStmt: public TbStmt {
 private:
-    Identifier* dbName;
+    Table* table;
     std::list<Field*>* fieldList;
 
 public:
-    CreateTbStmt(Identifier* dbName, std::list<Field*>* fieldList): dbName(dbName), fieldList(fieldList) { }
+    CreateTbStmt(Table* table, std::list<Field*>* fieldList): table(table), fieldList(fieldList) { }
 
     kind getKind() const override {
         return kind::CREATE;
     }
 
-    Identifier* getDbName() const {
-        return dbName;
+    Table* getTable() const {
+        return table;
     }
 
     std::list<Field*>* getFieldList() {
@@ -565,55 +605,55 @@ public:
     }
 };
 
-// DROP TABLE <tbName>
+// DROP TABLE <table>
 class DropTbStmt: public TbStmt {
 private:
-    Identifier* dbName;
+    Table* table;
 
 public:
-    explicit DropTbStmt(Identifier* dbName): dbName(dbName) { }
+    explicit DropTbStmt(Table* table): table(table) { }
 
     kind getKind() const override {
         return kind::CREATE;
     }
 
-    Identifier* getDbName() const {
-        return dbName;
+    Table* getTable() const {
+        return table;
     }
 };
 
 // DESC <tbName>
 class DescTbStmt: public TbStmt {
 private:
-    Identifier* dbName;
+    Table* table;
 
 public:
-    explicit DescTbStmt(Identifier* dbName): dbName(dbName) { }
+    explicit DescTbStmt(Table* table): table(table) { }
 
     kind getKind() const override {
         return kind::DESC;
     }
 
-    Identifier* getDbName() const {
-        return dbName;
+    Table* getTable() const {
+        return table;
     }
 };
 
 // INSERT INTO <tbName> VALUES <valueLists>
 class InsertTbStmt: public TbStmt {
 private:
-    Identifier* dbName;
+    Table* table;
     std::list<Value*>* valueList;
 
 public:
-    InsertTbStmt(Identifier* dbName, std::list<Value*>* valueList): dbName(dbName), valueList(valueList) { }
+    InsertTbStmt(Table* table, std::list<Value*>* valueList): table(table), valueList(valueList) { }
 
     kind getKind() const override {
         return kind::CREATE;
     }
 
-    Identifier* getDbName() const {
-        return dbName;
+    Table* getTable() const {
+        return table;
     }
 
     std::list<Value*>* getValueList() {
@@ -624,14 +664,14 @@ public:
 // DELETE FROM <tbName> WHERE <whereClause>
 class DeleteTbStmt: public TbStmt {
 private:
-    Identifier* tbName;
+    Table* table;
     WhereClause* whereClause;
 
 public:
-    explicit DeleteTbStmt(Identifier* tbName, WhereClause* whereClause): tbName(tbName), whereClause(whereClause) { }
+    explicit DeleteTbStmt(Table* table, WhereClause* whereClause): table(table), whereClause(whereClause) { }
 
-    Identifier* getTbName() {
-        return tbName;
+    Table* getTable() const {
+        return table;
     }
 
     WhereClause* getWhereClause() {
@@ -646,17 +686,17 @@ public:
 // UPDATE <tbName> SET <setClause> WHERE <whereClause>
 class UpdateTbStmt: public TbStmt {
 private:
-    Identifier* tbName;
+    Table* table;
     SetClause* setClause;
     WhereClause* whereClause;
 
 public:
-    explicit UpdateTbStmt(Identifier* tbName, SetClause* setClause, WhereClause* whereClause): tbName(tbName),
+    explicit UpdateTbStmt(Table* table, SetClause* setClause, WhereClause* whereClause): table(table),
                                                                                                setClause(setClause),
                                                                                                whereClause(whereClause) { }
 
-    Identifier* getTbName() {
-        return tbName;
+    Table* getTable() const {
+        return table;
     }
 
     SetClause* getSetClause() {
@@ -677,11 +717,11 @@ public:
 class SelectTbStmt: public TbStmt {
 private:
     std::list<Column*>* selector; // 为null时表示*
-    std::list<Identifier*>* tableList;
+    std::list<Table*>* tableList;
     WhereClause* whereClause;
 
 public:
-    SelectTbStmt(std::list<Column*>* selector, std::list<Identifier*>* tableList, WhereClause* whereClause): selector(selector),
+    SelectTbStmt(std::list<Column*>* selector, std::list<Table*>* tableList, WhereClause* whereClause): selector(selector),
                                                                                                            tableList(tableList),
                                                                                                            whereClause(whereClause) { }
 
@@ -689,7 +729,7 @@ public:
         return selector;
     }
 
-    std::list<Identifier*>* getTableList() {
+    std::list<Table*>* getTableList() {
         return tableList;
     }
 
@@ -725,7 +765,7 @@ public:
     virtual kind getKind() const = 0;
 };
 
-// <idxStmt>  := CREATE INDEX <tbName> '(' <colName> ')'
+// <idxStmt>  := CREATE INDEX <table> '(' <column> ')'
 class CreateIdxStmt: public IdxStmt {
 public:
     CreateIdxStmt(Identifier* tbName, Identifier* colName): IdxStmt(tbName, colName) { }

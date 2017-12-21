@@ -86,15 +86,15 @@ SysStmt         :   SHOW DATABASES
                     $$ = new SysStmt();
                 }
 
-DbStmt          :   CREATE DATABASE DbName
+DbStmt          :   CREATE DATABASE Database
                 {
                     $$ = new CreateDbStmt($3);
                 }
-	            |   DROP DATABASE DbName
+	            |   DROP DATABASE Database
 	            {
 	                $$ = new DropDbStmt($3);
 	            }
-	            |   USE DbName
+	            |   USE Database
 	            {
 	                $$ = new UseDbStmt($2);
 	            }
@@ -104,27 +104,27 @@ DbStmt          :   CREATE DATABASE DbName
 	            }
 	            ;
 
-TbStmt          :   CREATE TABLE TbName '(' FieldList ')'
+TbStmt          :   CREATE TABLE Table '(' FieldList ')'
                 {
                     $$ = new CreateTbStmt($3, &$5->fieldList);
                 }
-                |   DROP TABLE TbName
+                |   DROP TABLE Table
                 {
                     $$ = new DropTbStmt($3);
                 }
-	            |   DESC TbName
+	            |   DESC Table
 	            {
 	                $$ = new DescTbStmt($2);
 	            }
-	            |   INSERT INTO TbName VALUES ValueLists
+	            |   INSERT INTO Table VALUES ValueLists
 	            {
 	                $$ = new InsertTbStmt($3, &$5->valueList);
 	            }
-	            |   DELETE FROM TbName WHERE WhereClause
+	            |   DELETE FROM Table WHERE WhereClause
 	            {
 	                $$ = new DeleteTbStmt($3, (WhereClause*) $5);
 	            }
-	            |   UPDATE TbName SET SetClause WHERE WhereClause
+	            |   UPDATE Table SET SetClause WHERE WhereClause
 	            {
 	                $$ = new UpdateTbStmt($2, (SetClause*) $4, (WhereClause*) $6);
 	            }
@@ -134,11 +134,11 @@ TbStmt          :   CREATE TABLE TbName '(' FieldList ')'
 	            }
 	            ;
 
-IdxStmt         :   CREATE INDEX TbName '(' ColName ')'
+IdxStmt         :   CREATE INDEX Table '(' Column ')'
                 {
                     $$ = new CreateIdxStmt($3, $5);
                 }
-                |   DROP INDEX TbName '(' ColName ')'
+                |   DROP INDEX Table '(' Column ')'
                 {
                     $$ = new DropIdxStmt($3, $5);
                 }
@@ -157,20 +157,19 @@ FieldList       :   Field
 		        }
 		        ;
 
-/* 问题：是不是这里该干脆把ColName都改成Column */
-Field           :   ColName Type
+Field           :   Column Type
                 {
-                    $$ = new NormalField((Identifier*) $1, (Type*) $2);
+                    $$ = new NormalField((Column*) $1, (Type*) $2);
                 }
-                |   ColName Type NOT NULL_D
+                |   Column Type NOT NULL_D
                 {
-                    $$ = new NotNullField((Identifier*) $1, (Type*) $2);
+                    $$ = new NotNullField((Column*) $1, (Type*) $2);
                 }
 	            |   PRIMARY KEY '(' ColumnList ')'  /* 这里好像从colName变成colList了。。 */
 	            {
 	                $$ = new PrimaryField(&($4->columnList));
 	            }
-	            |   FOREIGN KEY '(' ColName ')' REFERENCES TbName '(' ColName ')'  /* TODO: 这应该也是扩展功能，随便加上了 */
+	            |   FOREIGN KEY '(' Column ')' REFERENCES TbName '(' ColName ')'  /* TODO: 这应该也是扩展功能，随便加上了 */
 	            {
 	                $$ = new ForeignField($4, $7, $9);
 	            }
@@ -191,17 +190,17 @@ Type            :   INT_D VALUE_INTEGER
 	            */
 	            ;
 
-WhereClause     :   Column Op Expr
+WhereClause     :   TabledColumn Op Expr
                 {
-                    $$ = new NormalWhereClause((Column*) $1, (Op*) $2, (Expr*) $3);
+                    $$ = new NormalWhereClause((TabledColumn*) $1, (Op*) $2, (Expr*) $3);
                 }
-			    |   Column IS NULL_D
+			    |   TabledColumn IS NULL_D
 			    {
-			        $$ = new IsNullWhereClause((Column*) $1, false);
+			        $$ = new IsNullWhereClause((TabledColumn*) $1, false);
 			    }
-			    |   Column IS NOT NULL_D
+			    |   TabledColumn IS NOT NULL_D
 			    {
-			        $$ = new IsNullWhereClause((Column*) $1, true);
+			        $$ = new IsNullWhereClause((TabledColumn*) $1, true);
 			    }
 			    |   WhereClause AND WhereClause
 			    {
@@ -277,12 +276,12 @@ Selector        :   '*'
 		        }
 		        ;
 
-TableList       :   TbName
+TableList       :   Table
                 {
                     $$ = new Tree();
                     $$->tableList.push_back($1);
                 }
-		        |   TableList ',' TbName
+		        |   TableList ',' Table
 		        {
 		            $$ = new Tree();
 		            $$->tableList.insert($$->tableList.end(), $1->tableList.begin(), $1->tableList.end());
@@ -303,13 +302,31 @@ ColumnList      :   Column
 		        }
 		        ;
 
-Column          :   TbName '.' ColName
+Database        :   Dbname
                 {
-                    $$ = new Column($1, $3);
+                    $$ = new Database($1);
                 }
-                |   ColName
+
+Table           :   Tbname
+                {
+                    $$ = new Table($1);
+                }
+
+/* 单个的列 */
+Column          :   ColName
                 {
                     $$ = new Column($1);
+                }
+                ;
+
+/* 可能带table的列 */
+TabledColumn    :   Column
+                {
+                    $$ = new TableColumn($1);
+                }
+                :   Table '.' Column
+                {
+                    $$ = new TabledColumn($1, $3);
                 }
                 ;
 
@@ -376,6 +393,37 @@ extern "C" {
 }
 
 // 以下是抄来的
+
+void Parse(PF_Manager &pfm, SM_Manager &smm, QL_Manager &qlm)
+{
+   RC rc;
+
+   static const char* PROMPT = "\nDATABASE << ";
+
+   // Set up global variables to their defaults
+   pPfm  = &pfm;
+   pSmm  = &smm;
+   pQlm  = &qlm;
+
+   /* Do forever */
+   while (true) {
+
+      /* Print a prompt */
+      cout << PROMPT;
+
+      /* Get the prompt to actually show up on the screen */
+      cout.flush();
+
+      /* If a query was successfully read, interpret it */
+      if(yyparse() == 0 && yyval.tree != nullptr)
+         if ((rc = interp(parse_tree))) {
+            PrintError(rc);
+            if (rc < 0)
+               bExit = TRUE;
+         }
+   }
+}
+
 /*
  * Required by yacc
  */
