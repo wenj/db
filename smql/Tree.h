@@ -160,25 +160,28 @@ public:
  * 类型
  */
 class Type: public Tree {
-protected:
-    int length;
-
 public:
     enum kind {
-        INT, VARCHAR
+        INT, VARCHAR, CHAR, TIME, DOUBLE
     };
 
-    explicit Type(const int& length): length(length) { }
+    explicit Type() = default;
 
     virtual kind getKind() const = 0;
 };
 
 class IntType: public Type {
+private:
+    int length;
 public:
-    explicit IntType(const int& length): Type(length) { }
+    explicit IntType(const int& length): length(length) { }
 
     kind getKind() const override {
         return kind::INT;
+    }
+
+    int getLength() const {
+        return length;
     }
 
     void print() override {
@@ -187,11 +190,18 @@ public:
 };
 
 class VarcharType: public Type {
+private:
+    int length;
+
 public:
-    explicit VarcharType(const int& length): Type(length) { }
+    explicit VarcharType(const int& length): length(length) { }
 
     kind getKind() const override {
         return kind::VARCHAR;
+    }
+
+    int getLength() const {
+        return length;
     }
 
     void print() override {
@@ -199,10 +209,56 @@ public:
     }
 };
 
+class CharType: public Type {
+private:
+    int length;
+
+public:
+    explicit CharType(const int& length): length(length) { }
+
+    kind getKind() const override {
+        return kind::VARCHAR;
+    }
+
+    int getLength() const {
+        return length;
+    }
+
+    void print() override {
+        IndentOstream::write("type char");
+    }
+};
+
+class TimeType: public Type {
+public:
+    explicit TimeType() = default;
+
+    kind getKind() const override {
+        return kind::TIME;
+    }
+
+    void print() override {
+        IndentOstream::write("type time");
+    }
+};
+
+class DoubleType: public Type {
+public:
+    explicit DoubleType() = default;
+
+    kind getKind() const override {
+        return kind::DOUBLE;
+    }
+
+    void print() override {
+        IndentOstream::write("type double");
+    }
+};
+
 class Value: public Tree {
 public:
     enum kind {
-        INT, STRING, NULL_VALUE
+        INT, STRING, NULL_VALUE, DOUBLE, TIME
     };
 
     virtual kind getKind() const = 0;
@@ -244,7 +300,7 @@ public:
     }
 
     kind getKind() const override {
-        return kind::INT;
+        return kind::STRING;
     }
 
     void print() override {
@@ -252,6 +308,48 @@ public:
         IndentOstream::writeAppend("\'");
         IndentOstream::writeAppend(value);
         IndentOstream::writeAppend("\'");
+    }
+};
+
+class DoubleValue: public Value {
+private:
+    double value;
+
+public:
+    explicit DoubleValue(double value): value(value) { }
+
+    kind getKind() const override {
+        return kind::DOUBLE;
+    }
+
+    double getValue() const {
+        return value;
+    }
+
+    void print() override {
+        IndentOstream::writeAppend("value double ");
+        IndentOstream::write(value);
+    }
+};
+
+class TimeValue: public Value {
+private:
+    struct tm value;
+
+public:
+    explicit TimeValue(struct tm value): value(value) { }
+
+    kind getKind() const override {
+        return kind::TIME;
+    }
+
+    struct tm getValue() const {
+        return value;
+    }
+
+    void print() override {
+        IndentOstream::write("value time ");
+        IndentOstream::write(value.tm_sec);
     }
 };
 

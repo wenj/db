@@ -5,6 +5,8 @@
 #ifndef MYDB_YYSTYPE_H
 #define MYDB_YYSTYPE_H
 
+#include <time.h>
+
 struct Op typedef Op;
 struct Identifier typedef Identifier;
 struct Tree typedef Tree;
@@ -12,6 +14,8 @@ struct Tree typedef Tree;
 typedef union {
     int intVal;
     char *stringVal;
+    double doubleVal;
+    struct tm timeVal;
     Op *opVal;
     Identifier *identVal;
     Tree *tree;

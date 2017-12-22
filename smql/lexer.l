@@ -1,10 +1,14 @@
 %{
 #include <string.h>
+#include <time.h>
+#include "strptime.h"
 #include "parser.h"  // 由YACC自动生成
 #include "YYSTYPE.h"
 #include "redbase.h"
 
 static char *copy_string(char *s, int len);
+
+static struct tm parse_date(char* s);
 
 extern YYSTYPE yylval;  // patch（也不知道为啥）
 %}
@@ -93,11 +97,22 @@ extern YYSTYPE yylval;  // patch（也不知道为啥）
 									return VALUE_INTEGER;
 								}
 
-'[^']*'							{
-                                    // string
+\'[^\']*\'						{
+                                    // 字符串
 									yylval.stringVal = copy_string(yytext, yyleng);
 									return VALUE_STRING;
 								}
+
+[-+]?[0-9]*\.[0-9]+             {
+                                    // 浮点数
+                                    yylval.doubleVal = atof(yytext);
+                                    return VALUE_DOUBLE;
+                                }
+\d{1,4}\/\d{1,2}\/\d{1,2}       {
+                                    // 日期格式：yyyy/mm/dd
+                                    yylval.timeVal = parse_date(yytext);
+                                    return VALUE_TIME;
+                                }
 
 %%
 
@@ -108,4 +123,12 @@ static char *copy_string(char *s, int len)
    strncpy(copy, s, len);
    copy[len] = '\0';
    return copy;
+}
+
+// 处理日期输入
+static struct tm parse_date(char* s)
+{
+    struct tm when;
+    strptime(s, "%y/%d/%m", &when);
+    return when;
 }

@@ -40,7 +40,7 @@ set(SOURCE_FILES main.cpp
             ${RM_DIR}/rm_record.cc ${RM_DIR}/rm_rid.cc
         ${IX_DIR}/ix_indexhandle.cc ${IX_DIR}/ix_indexscan.cc ${IX_DIR}/ix_manager.cc
         ${FlexOutput} ${YACCOutputSource}
-        ${SMQL_DIR}/Tree.cpp smql/YYSTYPE.h utils/IndentOstream.cpp utils/IndentOstream.h)
+        ${SMQL_DIR}/Tree.cpp smql/YYSTYPE.h utils/IndentOstream.cpp utils/IndentOstream.h utils/strptime.cpp utils/strptime.h)
 
 add_executable(mydb ${SOURCE_FILES})
 

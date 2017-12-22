@@ -13,9 +13,11 @@
 %start Program
 
 /*
-%union{
+typedef union {
     int intVal;
     char *stringVal;
+    double doubleVal;
+    struct tm timeVal;
     Op *opVal;
     Identifier *identVal;
     Tree *tree;
@@ -26,6 +28,8 @@
 */
 %token      <intVal>        VALUE_INTEGER
 %token      <stringVal>     VALUE_STRING
+%token      <doubleVal>     VALUE_DOUBLE
+%token      <timeVal>       VALUE_TIME
 %type       <opVal>         Op
 %type       <identVal>      DbName          TbName          ColName
 %type       <tree>          Program         Stmt            SysStmt         DbStmt          TbStmt          IdxStmt
@@ -42,8 +46,8 @@
 %token DATABASE DATABASES TABLE TABLES SHOW CREATE
 %token DROP USE PRIMARY KEY NOT NULL_D
 %token INSERT INTO VALUES DELETE FROM WHERE
-%token UPDATE SET SELECT IS INT_D VARCHAR  /* INT FLOAT NULL 都不能直接作为token…… */
-%token DESC INDEX AND DATE FLOAT_D FOREIGN
+%token UPDATE SET SELECT IS INT_D VARCHAR CHAR_D FLOAT_D DATE  /* INT FLOAT NULL 都不能直接作为token…… */
+%token DESC INDEX AND FOREIGN
 %token REFERENCES
 %token EOF /* patch for lexer.cc */
 
@@ -55,6 +59,8 @@ Program         :   /* empty */
 			    }
 			    |   Program Stmt
 			    {
+			        $$ = new Tree();
+			        $$->stmtList.insert($$->stmtList.end(), $1->stmtList.begin(), $2->stmtList.end());
 			        $$->stmtList.push_back((Stmt*) $2);
 			    }
 			    |   EOF
@@ -167,7 +173,7 @@ Field           :   Column Type
                 }
 	            |   PRIMARY KEY '(' ColumnList ')'  /* 这里好像从colName变成colList了。。 */
 	            {
-	                $$ = new PrimaryField(&($4->columnList));
+	                $$ = new PrimaryField(&$4->columnList);
 	            }
 	            |   FOREIGN KEY '(' Column ')' REFERENCES Table '(' Column ')'  /* TODO: 这应该也是扩展功能，随便加上了 */
 	            {
@@ -175,19 +181,27 @@ Field           :   Column Type
 	            }
 	            ;
 
-Type            :   INT_D VALUE_INTEGER
+/* CHAR和VARCHAR的区别是VARCHAR长度可变，但是我们根本没有实现这个功能 */
+Type            :   INT_D '(' VALUE_INTEGER ')'
                 {
-                    $$ = new IntType($2);
+                    $$ = new IntType($3);
                 }
-	            |   VARCHAR VALUE_INTEGER
+	            |   VARCHAR '(' VALUE_INTEGER ')'
 	            {
-	                $$ = new VarcharType($2);
+	                $$ = new VarcharType($3);
 	            }
-	            /*
-	            TODO: 这是扩展功能吗？？
+	            |   CHAR_D '(' VALUE_INTEGER ')'
+	            {
+	                $$ = new CharType($3);
+	            }
 	            |   DATE
-	            |   FLOAT
-	            */
+	            {
+	                $$ = new TimeType();
+	            }
+	            |   FLOAT_D
+	            {
+	                $$ = new DoubleType();
+	            }
 	            ;
 
 WhereClause     :   TabledColumn Op Expr
@@ -367,6 +381,14 @@ Value           :   VALUE_INTEGER
 	            |   NULL_D
 	            {
 	                $$ = new NullValue();
+	            }
+	            |   VALUE_DOUBLE
+	            {
+	                $$ = new DoubleValue($1);
+	            }
+	            |   VALUE_TIME
+	            {
+	                $$ = new TimeValue($1);
 	            }
 	            ;
 

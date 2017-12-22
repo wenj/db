@@ -57,24 +57,24 @@ public:
         cout.flush();
     }
 
-    static void write(const string& s) {
-        write(s.c_str());
-    }
-
-    static void write(const int& i) {
-        write(toString(i));
+    template <typename T>
+    static void write(const T& val)
+    {
+        stringstream stream;
+        stream << val;
+        cout << indent_str << content << stream.str() << endl;
+        content = "";
+        cout.flush();
     }
 
     static void writeAppend(const char* s) {
         content += s;
     }
 
-    static void writeAppend(const string& s) {
-        writeAppend(s.c_str());
-    }
-
-    static void writeAppend(const int& i) {
-        writeAppend(toString(i));
+    template <typename T>
+    static void writeAppend(const T& val)
+    {
+        writeAppend(toString(val));
     }
 };
 
