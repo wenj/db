@@ -12,23 +12,25 @@ set(SMQL_DIR "smql")
 set(LIB_DIR "${CMAKE_CURRENT_SOURCE_DIR}/lib")
 
 # Lexer和Parser
-set(FLEX_EXECUTABLE ${LIB_DIR}/flex/flex)
-set(YACC_EXECUTABLE ${LIB_DIR}/byacc/yacc)
+# set(FLEX_EXECUTABLE ${LIB_DIR}/flex/flex)
+# set(YACC_EXECUTABLE ${LIB_DIR}/byacc/yacc)
+set(FLEX_EXECUTABLE flex++)
+set(YACC_EXECUTABLE yacc)
 set(FlexInput ${CMAKE_CURRENT_SOURCE_DIR}/${SMQL_DIR}/lexer.l)
 set(YACCInput ${CMAKE_CURRENT_SOURCE_DIR}/${SMQL_DIR}/parser.y)
-set(FlexOutput ${CMAKE_CURRENT_SOURCE_DIR}/${SMQL_DIR}/lexer.c)
+set(FlexOutput ${CMAKE_CURRENT_SOURCE_DIR}/${SMQL_DIR}/lexer.cc)
 set(YACCOutputHeader ${CMAKE_CURRENT_SOURCE_DIR}/${SMQL_DIR}/parser.h)
 set(YACCOutputSource ${CMAKE_CURRENT_SOURCE_DIR}/${SMQL_DIR}/parser.cc)
 ADD_CUSTOM_COMMAND(
         OUTPUT ${FlexOutput}
         COMMAND ${FLEX_EXECUTABLE} ${FlexInput}
-        COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/rename_lex
-        COMMENT "Generating lexer.c"
+        COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/rename_lex.sh
+        COMMENT "Generating lexer.cc"
 )
 ADD_CUSTOM_COMMAND(
         OUTPUT ${YACCOutputHeader} ${YACCOutputSource}
         COMMAND ${YACC_EXECUTABLE} -d ${YACCInput}
-        COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/rename_yacc
+        COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/rename_yacc.sh
         COMMENT "Generating parser.cc"
 )
 
@@ -43,6 +45,7 @@ set(SOURCE_FILES main.cpp
         ${SMQL_DIR}/Tree.cpp smql/YYSTYPE.h utils/IndentOstream.cpp utils/IndentOstream.h utils/strptime.cpp utils/strptime.h smql/BFParse.cpp smql/BFParse.h)
 
 add_executable(mydb ${SOURCE_FILES})
+set_target_properties(mydb PROPERTIES COMPILE_FLAGS "-m32" LINK_FLAGS "-m32")
 
 include_directories(
         "${UTIL_DIR}"

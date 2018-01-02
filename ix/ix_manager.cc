@@ -1,7 +1,7 @@
 #include "ix.h"
 #include <cstring>
 #include <string>
-#include <stdlib.h>
+#include <cstdlib>
 
 IX_Manager::IX_Manager(PF_Manager &pfm) : pfm(pfm) {}
 IX_Manager::~IX_Manager() {}
@@ -13,7 +13,8 @@ RC IX_Manager::CreateIndex(const char *fileName, int indexNo, AttrType attrType,
 	std::string indexFileName(fileName);
 	indexFileName.append(".");
 	char buffer[MAXNAME];
-	itoa(indexNo, buffer, 10);
+	// itoa(indexNo, buffer, 10);
+    strcpy(buffer, std::to_string(indexNo).c_str());
 	indexFileName.append(buffer);
 	rc = pfm.CreateFile(indexFileName.c_str());
 	if (rc < 0) {
@@ -53,7 +54,8 @@ RC IX_Manager::DestroyIndex(const char *fileName, int indexNo) {
 	std::string indexFileName(fileName);
 	indexFileName.append(".");
 	char buffer[MAXNAME];
-	itoa(indexNo, buffer, 10);
+	// itoa(indexNo, buffer, 10);
+    strcpy(buffer, std::to_string(indexNo).c_str());
 	indexFileName.append(buffer);
 	rc = pfm.DestroyFile(indexFileName.c_str());
 	if (rc < 0) {
@@ -69,7 +71,8 @@ RC IX_Manager::OpenIndex(const char *fileName, int indexNo, IX_IndexHandle &inde
 	std::string indexFileName(fileName);
 	indexFileName.append(".");
 	char buffer[MAXNAME];
-	itoa(indexNo, buffer, 10);
+	// itoa(indexNo, buffer, 10);
+    strcpy(buffer, std::to_string(indexNo).c_str());
 	indexFileName.append(buffer);
 	PF_FileHandle fileHandle;
 	rc = pfm.OpenFile(indexFileName.c_str(), fileHandle);

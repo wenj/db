@@ -10,7 +10,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <time.h>
-#include <conio.h>
+// #include <conio.h>
 
 #ifdef __cplusplus
 extern "C" {

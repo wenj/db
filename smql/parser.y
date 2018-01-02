@@ -1,5 +1,5 @@
 %{
-#include "YYSTYPE.h"
+// #include "YYSTYPE.h"
 #include "Tree.h"
 #include "pf.h"     // for PF_PrintError
 #include "rm.h"     // for RM_PrintError
@@ -12,8 +12,7 @@
 
 %start Program
 
-/*
-typedef union {
+%union {
     int intVal;
     char *stringVal;
     double doubleVal;
@@ -21,7 +20,7 @@ typedef union {
     Op *opVal;
     Identifier *identVal;
     Tree *tree;
-}*/
+}
 
 /* 抄的，我也不明白这些在干什么
 * 好像规定了type之后，就不用调用$$.tree了，可以直接用$$之类的

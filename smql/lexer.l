@@ -4,14 +4,14 @@
 #include <time.h>
 #include "strptime.h"
 #include "parser.h"  // 由YACC自动生成
-#include "YYSTYPE.h"
+// #include "YYSTYPE.h"
 #include "redbase.h"
 
 static char *copy_string(char *s, int len);
 
 static struct tm parse_date(char* s);
 
-extern YYSTYPE yylval;  // patch（也不知道为啥）
+// extern YYSTYPE yylval;  // patch（也不知道为啥）
 %}
 
 %%
