@@ -40,4 +40,3 @@
 #define AND 296
 #define FOREIGN 297
 #define REFERENCES 298
-#define EOF 299

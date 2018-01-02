@@ -49,7 +49,7 @@ typedef union {
 %token UPDATE SET SELECT IS INT_D VARCHAR CHAR_D FLOAT_D DATE  /* INT FLOAT NULL 都不能直接作为token…… */
 %token DESC INDEX AND FOREIGN
 %token REFERENCES
-%token EOF /* patch for lexer.cc */
+/* %token EOF patch for lexer.cc */
 
 %%
 
@@ -62,10 +62,6 @@ Program         :   /* empty */
 			        $$ = new Tree();
 			        $$->stmtList.insert($$->stmtList.end(), $1->stmtList.begin(), $2->stmtList.end());
 			        $$->stmtList.push_back((Stmt*) $2);
-			    }
-			    |   EOF
-			    {
-			        $$ = nullptr;
 			    }
 			    ;
 
@@ -431,12 +427,18 @@ void Parse()
 
         int i = yyparse();
 
+        cout << "DEBUG: Has been processing" << endl;
+        cout.flush();
+
         /* If a query was successfully read, interpret it */
         if(i == 0 && yyval.tree != nullptr) {
+            cout << "DEBUG: ready to print" << endl;
+            cout.flush();
             yyval.tree->print();
         }
 
-        cout << "处理完了" << endl;
+        cout << "DEBUG: Finished processing" << endl;
+        cout.flush();
     }
 }
 

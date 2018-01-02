@@ -1,5 +1,6 @@
 %{
 #include <string.h>
+#include <stdio.h>
 #include <time.h>
 #include "strptime.h"
 #include "parser.h"  // 由YACC自动生成
@@ -15,12 +16,18 @@ extern YYSTYPE yylval;  // patch（也不知道为啥）
 
 %%
 
-"DATABASE"                      { return DATABASE; }
+"DATABASE"                      {
+                                    printf("DEBUG: Lexer: processing keyword \"%s\"\n", "DATABASE");
+                                    return DATABASE;
+                                }
 "DATABASES"                     { return DATABASES; }
 "TABLE"                         { return TABLE; }
 "TABLES"                        { return TABLES; }
 "SHOW"                          { return SHOW; }
-"CREATE"                        { return CREATE; }
+"CREATE"                        {
+                                    printf("DEBUG: Lexer: processing keyword \"%s\"\n", "CREATE");
+                                    return CREATE;
+                                }
 "DROP"                          { return DROP; }
 "USE"                           { return USE; }
 "PRIMARY"                       { return PRIMARY; }
@@ -88,6 +95,7 @@ extern YYSTYPE yylval;  // patch（也不知道为啥）
 [A-Za-z][_0-9A-Za-z]*			{
                                     // 标识符
 									yylval.stringVal = copy_string(yytext, yyleng);
+									printf("DEBUG: Lexer: processing identifier \"%s\"\n", yylval.stringVal);
 									return VALUE_STRING;
 								}
 

@@ -61,139 +61,133 @@ static char yysccsid[] = "@(#)yaccpar	1.9 (Berkeley) 02/21/93";
 #define AND 296
 #define FOREIGN 297
 #define REFERENCES 298
-#define EOF 299
 #define YYERRCODE 256
 short yylhs[] = {                                        -1,
-    0,    0,    0,    5,    5,    5,    5,    6,    7,    7,
-    7,    7,    8,    8,    8,    8,    8,    8,    8,    9,
-    9,   24,   24,   10,   10,   10,   10,   11,   11,   11,
-   11,   11,   12,   12,   12,   12,    1,    1,    1,    1,
-    1,    1,   22,   22,   13,   13,   14,   18,   18,   20,
-   20,   19,   19,   21,   25,   23,   26,   26,   17,   17,
-   16,   16,   15,   15,   15,   15,   15,    2,    3,    4,
+    0,    0,    5,    5,    5,    5,    6,    7,    7,    7,
+    7,    8,    8,    8,    8,    8,    8,    8,    9,    9,
+   24,   24,   10,   10,   10,   10,   11,   11,   11,   11,
+   11,   12,   12,   12,   12,    1,    1,    1,    1,    1,
+    1,   22,   22,   13,   13,   14,   18,   18,   20,   20,
+   19,   19,   21,   25,   23,   26,   26,   17,   17,   16,
+   16,   15,   15,   15,   15,   15,    2,    3,    4,
 };
 short yylen[] = {                                         2,
-    0,    2,    1,    2,    2,    2,    2,    2,    3,    3,
-    2,    2,    6,    3,    2,    5,    5,    6,    6,    6,
-    6,    1,    3,    2,    4,    5,   10,    4,    4,    4,
-    1,    1,    3,    3,    4,    3,    1,    1,    1,    1,
-    1,    1,    1,    1,    1,    3,    3,    1,    1,    1,
-    3,    1,    3,    1,    1,    1,    1,    3,    3,    3,
-    1,    3,    1,    1,    1,    1,    1,    1,    1,    1,
+    0,    2,    2,    2,    2,    2,    2,    3,    3,    2,
+    2,    6,    3,    2,    5,    5,    6,    6,    6,    6,
+    1,    3,    2,    4,    5,   10,    4,    4,    4,    1,
+    1,    3,    3,    4,    3,    1,    1,    1,    1,    1,
+    1,    1,    1,    1,    3,    3,    1,    1,    1,    3,
+    1,    3,    1,    1,    1,    1,    3,    3,    3,    1,
+    3,    1,    1,    1,    1,    1,    1,    1,    1,
 };
-short yydefred[] = {                                      0,
-    3,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    2,    0,    0,    0,    0,    8,   12,    0,    0,
-    0,    0,    0,    0,   68,   54,   11,    0,    0,   69,
-   55,    0,   70,   48,   56,    0,    0,   52,   15,    4,
-    5,    6,    7,    9,    0,    0,   10,   14,    0,    0,
+short yydefred[] = {                                      1,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-   45,    0,    0,   50,   53,    0,    0,   22,    0,    0,
-    0,    0,    0,    0,    0,    0,   57,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,   32,
-   31,    0,   13,    0,   20,   21,   63,   64,   66,   67,
-   65,   61,    0,    0,    0,    0,   37,   38,   39,   40,
-   41,   42,    0,    0,    0,   46,   47,    0,   51,    0,
-    0,    0,    0,    0,    0,   23,   59,    0,    0,    0,
-   58,    0,   34,   64,   43,   33,   44,    0,    0,    0,
-    0,    0,   25,   62,   35,   26,    0,   28,   29,   30,
-    0,    0,    0,    0,   27,
+    2,    0,    0,    0,    0,    7,   11,    0,    0,    0,
+    0,    0,    0,   67,   53,   10,    0,    0,   68,   54,
+    0,   69,   47,   55,    0,    0,   51,   14,    3,    4,
+    5,    6,    8,    0,    0,    9,   13,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,    0,   44,
+    0,    0,   49,   52,    0,    0,   21,    0,    0,    0,
+    0,    0,    0,    0,    0,   56,    0,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,    0,   31,   30,
+    0,   12,    0,   19,   20,   62,   63,   65,   66,   64,
+   60,    0,    0,    0,    0,   36,   37,   38,   39,   40,
+   41,    0,    0,    0,   45,   46,    0,   50,    0,    0,
+    0,    0,    0,    0,   22,   58,    0,    0,    0,   57,
+    0,   33,   63,   42,   32,   43,    0,    0,    0,    0,
+    0,   24,   61,   34,   25,    0,   27,   28,   29,    0,
+    0,    0,    0,   26,
 };
-short yydgoto[] = {                                       2,
-  114,   26,   31,   35,   12,   13,   14,   15,   16,   68,
-   92,   76,   60,   61,  102,  103,   74,   36,   37,   63,
-   27,  136,   77,   70,   78,   79,
+short yydgoto[] = {                                       1,
+  113,   25,   30,   34,   11,   12,   13,   14,   15,   67,
+   91,   75,   59,   60,  101,  102,   73,   35,   36,   62,
+   26,  135,   76,   69,   77,   78,
 };
-short yysindex[] = {                                   -289,
-    0, -211, -232, -258, -254, -244, -252, -229, -200,  -37,
- -200,    0,    5,    6,    7,   10,    0,    0, -244, -200,
- -200, -244, -200, -200,    0,    0,    0, -200, -200,    0,
-    0, -216,    0,    0,    0, -208,   28,    0,    0,    0,
-    0,    0,    0,    0,   38,   39,    0,    0,   40, -204,
- -202, -174, -200, -174, -246, -174, -174,   45, -167,  -41,
-    0, -169,  -40,    0,    0, -179, -172,    0, -190,  -25,
-   64,   66, -170,   65,    0, -186,    0,   69, -231, -167,
- -174, -170, -167, -200,   71,   76,   77,   78,   79,    0,
-    0, -157,    0, -246,    0,    0,    0,    0,    0,    0,
-    0,    0,  -17, -170, -167, -174,    0,    0,    0,    0,
-    0,    0, -255, -164, -186,    0,    0, -186,    0, -174,
- -174, -136, -135, -134, -154,    0,    0, -170,   81, -186,
-    0, -152,    0,    0,    0,    0,    0,   -1,   86,   87,
-   88,   89,    0,    0,    0,    0, -166,    0,    0,    0,
- -200,   91, -174,   92,    0,
+short yysindex[] = {                                      0,
+ -211, -232, -258, -254, -248, -276, -269, -230,  -37, -230,
+    0,   -5,   -1,    5,    7,    0,    0, -248, -230, -230,
+ -248, -230, -230,    0,    0,    0, -230, -230,    0,    0,
+ -219,    0,    0,    0, -214,   26,    0,    0,    0,    0,
+    0,    0,    0,   32,   35,    0,    0,   37, -203, -205,
+ -178, -230, -178, -246, -178, -178,   42, -174,  -43,    0,
+ -176,  -41,    0,    0, -185, -184,    0, -190,  -25,   56,
+   63, -170,   61,    0, -189,    0,   64, -231, -174, -178,
+ -170, -174, -230,   69,   71,   75,   76,   77,    0,    0,
+ -159,    0, -246,    0,    0,    0,    0,    0,    0,    0,
+    0,  -17, -170, -174, -178,    0,    0,    0,    0,    0,
+    0, -255, -164, -189,    0,    0, -189,    0, -178, -178,
+ -138, -137, -136, -156,    0,    0, -170,   79, -189,    0,
+ -154,    0,    0,    0,    0,    0,    1,   84,   85,   86,
+   87,    0,    0,    0,    0, -169,    0,    0,    0, -230,
+   90, -178,   91,    0,
 };
-short yyrindex[] = {                                      1,
+short yyrindex[] = {                                      0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0, -149,    0,    0,    0,
+    0,    0,    0,    0,    0, -152,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,   80,  -46,   82,    0,    0,    0,    0,
+    0,    0,   74,  -46,   78,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,   11,    0,    0,    0,    0,    0,    0,    0,    0,
+   11,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,   83,    0,    0,   84,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,   85,   90,
+    0,    0,    0,   80,    0,    0,   81,    0,    0,    0,
+    0,    0,    0,    0,    0,    0,    0,   82,   83,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,
+    0,    0,    0,    0,
 };
 short yygindex[] = {                                      0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,   41,
-    0,  -38,    0,   55,  -75,   33,    0,    0,   18,    0,
-   37,    0,   -8,    0,   -3,    0,
+    0,  -39,    0,   55,  -74,   33,    0,    0,   19,    0,
+   38,    0,   -7,    0,   -2,    0,
 };
-#define YYTABLESIZE 295
-short yytable[] = {                                      69,
-    1,   38,   81,   84,   34,   32,  117,   39,   19,    1,
-   20,   33,   22,   25,   23,   93,   45,   46,   94,   48,
-   49,  132,  133,  127,   50,   51,  128,   28,   66,  107,
-  108,  109,  110,  111,  112,   17,   21,   18,  135,  146,
-   24,  115,   54,   62,  118,   65,   69,   71,   72,   64,
-   67,   24,  144,   29,   24,   44,  113,   30,   47,    3,
-    4,    5,    6,   40,   41,   42,  130,    7,   43,   52,
-    8,   54,   62,    9,   53,   10,   58,   55,   56,   57,
-  119,   59,   11,   33,   73,   69,   97,   98,   99,  100,
-   75,   82,   97,  134,   99,  100,   85,  131,   87,   88,
-   89,   90,   91,   86,   95,  137,   96,  101,  104,  105,
-  120,   38,  139,  101,  106,  121,  122,  123,  124,  125,
-  140,  141,  142,  143,  128,  145,  147,  148,  149,  150,
-  153,  151,  155,   49,  126,  116,  129,  138,   16,    0,
-   17,   18,   19,   60,  154,    0,    0,  152,   36,    0,
+#define YYTABLESIZE 243
+short yytable[] = {                                      68,
+   80,   37,   83,   27,   33,   31,  116,   38,   18,   24,
+   19,   32,   21,   28,   22,   92,   44,   45,   93,   47,
+   48,  131,  132,  126,   49,   50,  127,   29,   65,  106,
+  107,  108,  109,  110,  111,   16,   20,   17,  134,  114,
+   23,  145,  117,   61,   53,   64,   68,   70,   71,   63,
+   66,   23,  143,   39,   23,   43,  112,   40,   46,    2,
+    3,    4,    5,   41,  129,   42,   51,    6,   52,   53,
+    7,   54,   61,    8,   55,    9,   56,   57,   58,   32,
+  118,   72,   10,   74,   81,   68,   96,   97,   98,   99,
+   84,   85,   96,  133,   98,   99,   94,  130,   86,   87,
+   88,   89,   90,   95,  103,  136,  104,  100,  119,  105,
+  120,   37,  138,  100,  121,  122,  123,  124,  139,  140,
+  141,  142,  127,  144,  146,  147,  148,  149,  150,  152,
+   48,  154,   15,  125,  115,  128,   16,  137,   17,   18,
+   59,   35,    0,    0,  153,    0,    0,  151,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,   70,   70,   70,   70,   70,   70,
-   33,    0,    0,    0,    0,    0,    0,    0,    0,    0,
+    0,    0,    0,    0,   69,   69,   69,   69,   69,   69,
+   32,    0,    0,    0,    0,    0,    0,    0,    0,    0,
     0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,   70,   80,   83,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    0,    0,    0,    0,    0,    0,    0,    0,    0,
-    0,    1,    1,    1,    1,    0,    0,    0,    0,    1,
-    0,    0,    1,    0,    0,    1,    0,    1,    0,    0,
-    0,    0,    0,    0,    1,
+   79,   69,   82,
 };
 short yycheck[] = {                                      46,
-    0,   10,   44,   44,   42,    9,   82,   11,  267,  299,
-  269,  258,  267,  258,  269,   41,   20,   21,   44,   23,
-   24,  277,  278,   41,   28,   29,   44,  280,  275,  261,
-  262,  263,  264,  265,  266,  268,  295,  270,  114,   41,
-  295,   80,   44,   52,   83,   54,   55,   56,   57,   53,
-  297,   41,  128,  283,   44,   19,  288,  258,   22,  271,
-  272,  273,  274,   59,   59,   59,  105,  279,   59,  286,
-  282,   44,   81,  285,  283,  287,  281,   40,   40,   40,
-   84,  284,  294,  258,   40,   94,  257,  258,  259,  260,
-  258,  261,  257,  258,  259,  260,  276,  106,  289,  290,
-  291,  292,  293,  276,   41,  114,   41,  278,   44,  296,
-   40,  120,  121,  278,   46,   40,   40,   40,   40,  277,
-  257,  257,  257,  278,   44,  278,   41,   41,   41,   41,
-   40,  298,   41,  283,   94,   81,  104,  120,   59,   -1,
-   59,   59,   59,   59,  153,   -1,   -1,  151,   59,   -1,
+   44,    9,   44,  280,   42,    8,   81,   10,  267,  258,
+  269,  258,  267,  283,  269,   41,   19,   20,   44,   22,
+   23,  277,  278,   41,   27,   28,   44,  258,  275,  261,
+  262,  263,  264,  265,  266,  268,  295,  270,  113,   79,
+  295,   41,   82,   51,   44,   53,   54,   55,   56,   52,
+  297,   41,  127,   59,   44,   18,  288,   59,   21,  271,
+  272,  273,  274,   59,  104,   59,  286,  279,  283,   44,
+  282,   40,   80,  285,   40,  287,   40,  281,  284,  258,
+   83,   40,  294,  258,  261,   93,  257,  258,  259,  260,
+  276,  276,  257,  258,  259,  260,   41,  105,  289,  290,
+  291,  292,  293,   41,   44,  113,  296,  278,   40,   46,
+   40,  119,  120,  278,   40,   40,   40,  277,  257,  257,
+  257,  278,   44,  278,   41,   41,   41,   41,  298,   40,
+  283,   41,   59,   93,   80,  103,   59,  119,   59,   59,
+   59,   59,   -1,   -1,  152,   -1,   -1,  150,   -1,   -1,
    -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
    -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
    -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
@@ -203,18 +197,13 @@ short yycheck[] = {                                      46,
    -1,   -1,   -1,   -1,  261,  262,  263,  264,  265,  266,
   258,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
    -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
-   -1,  288,  284,  284,   -1,   -1,   -1,   -1,   -1,   -1,
-   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
-   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,   -1,
-   -1,  271,  272,  273,  274,   -1,   -1,   -1,   -1,  279,
-   -1,   -1,  282,   -1,   -1,  285,   -1,  287,   -1,   -1,
-   -1,   -1,   -1,   -1,  294,
+  284,  288,  284,
 };
-#define YYFINAL 2
+#define YYFINAL 1
 #ifndef YYDEBUG
 #define YYDEBUG 0
 #endif
-#define YYMAXTOKEN 299
+#define YYMAXTOKEN 298
 #if YYDEBUG
 char *yyname[] = {
 "end-of-file",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -228,13 +217,12 @@ char *yyname[] = {
 "GT","GE","DATABASE","DATABASES","TABLE","TABLES","SHOW","CREATE","DROP","USE",
 "PRIMARY","KEY","NOT","NULL_D","INSERT","INTO","VALUES","DELETE","FROM","WHERE",
 "UPDATE","SET","SELECT","IS","INT_D","VARCHAR","CHAR_D","FLOAT_D","DATE","DESC",
-"INDEX","AND","FOREIGN","REFERENCES","EOF",
+"INDEX","AND","FOREIGN","REFERENCES",
 };
 char *yyrule[] = {
 "$accept : Program",
 "Program :",
 "Program : Program Stmt",
-"Program : EOF",
 "Stmt : SysStmt ';'",
 "Stmt : DbStmt ';'",
 "Stmt : TbStmt ';'",
@@ -326,7 +314,7 @@ YYSTYPE yylval;
 short yyss[YYSTACKSIZE];
 YYSTYPE yyvs[YYSTACKSIZE];
 #define yystacksize YYSTACKSIZE
-#line 411 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 407 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 
 extern "C" {
     int yyparse(void);
@@ -350,12 +338,18 @@ void Parse()
 
         int i = yyparse();
 
+        cout << "DEBUG: Has been processing" << endl;
+        cout.flush();
+
         /* If a query was successfully read, interpret it */
         if(i == 0 && yyval.tree != nullptr) {
+            cout << "DEBUG: ready to print" << endl;
+            cout.flush();
             yyval.tree->print();
         }
 
-        cout << "处理完了" << endl;
+        cout << "DEBUG: Finished processing" << endl;
+        cout.flush();
     }
 }
 
@@ -376,7 +370,7 @@ int yywrap(void)
     return 1;
 }
 #endif
-#line 380 "y.tab.c"
+#line 374 "y.tab.c"
 #define YYABORT goto yyabort
 #define YYREJECT goto yyabort
 #define YYACCEPT goto yyaccept
@@ -532,10 +526,10 @@ case 2:
 			    }
 break;
 case 3:
-#line 67 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 69 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-			        yyval.tree = nullptr;
-			    }
+                    yyval.tree = yyvsp[-1].tree;
+                }
 break;
 case 4:
 #line 73 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
@@ -556,246 +550,240 @@ case 6:
                 }
 break;
 case 7:
-#line 85 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 87 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-                    yyval.tree = yyvsp[-1].tree;
+                    yyval.tree = new SysStmt();
                 }
 break;
 case 8:
-#line 91 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 92 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-                    yyval.tree = new SysStmt();
+                    yyval.tree = new CreateDbStmt((Database*) yyvsp[0].tree);
                 }
 break;
 case 9:
 #line 96 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-                    yyval.tree = new CreateDbStmt((Database*) yyvsp[0].tree);
-                }
+	                yyval.tree = new DropDbStmt((Database*) yyvsp[0].tree);
+	            }
 break;
 case 10:
 #line 100 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-	                yyval.tree = new DropDbStmt((Database*) yyvsp[0].tree);
+	                yyval.tree = new UseDbStmt((Database*) yyvsp[0].tree);
 	            }
 break;
 case 11:
 #line 104 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-	                yyval.tree = new UseDbStmt((Database*) yyvsp[0].tree);
+	                yyval.tree = new ShowDbStmt();
 	            }
 break;
 case 12:
-#line 108 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 110 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-	                yyval.tree = new ShowDbStmt();
-	            }
+                    yyval.tree = new CreateTbStmt((Table*) yyvsp[-3].tree, &yyvsp[-1].tree->fieldList);
+                }
 break;
 case 13:
 #line 114 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-                    yyval.tree = new CreateTbStmt((Table*) yyvsp[-3].tree, &yyvsp[-1].tree->fieldList);
+                    yyval.tree = new DropTbStmt((Table*) yyvsp[0].tree);
                 }
 break;
 case 14:
 #line 118 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-                    yyval.tree = new DropTbStmt((Table*) yyvsp[0].tree);
-                }
+	                yyval.tree = new DescTbStmt((Table*) yyvsp[0].tree);
+	            }
 break;
 case 15:
 #line 122 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-	                yyval.tree = new DescTbStmt((Table*) yyvsp[0].tree);
+	                yyval.tree = new InsertTbStmt((Table*) yyvsp[-2].tree, &yyvsp[0].tree->valueList);
 	            }
 break;
 case 16:
 #line 126 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-	                yyval.tree = new InsertTbStmt((Table*) yyvsp[-2].tree, &yyvsp[0].tree->valueList);
+	                yyval.tree = new DeleteTbStmt((Table*) yyvsp[-2].tree, (WhereClause*) yyvsp[0].tree);
 	            }
 break;
 case 17:
 #line 130 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-	                yyval.tree = new DeleteTbStmt((Table*) yyvsp[-2].tree, (WhereClause*) yyvsp[0].tree);
+	                yyval.tree = new UpdateTbStmt((Table*) yyvsp[-4].tree, (SetClause*) yyvsp[-2].tree, (WhereClause*) yyvsp[0].tree);
 	            }
 break;
 case 18:
 #line 134 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-	                yyval.tree = new UpdateTbStmt((Table*) yyvsp[-4].tree, (SetClause*) yyvsp[-2].tree, (WhereClause*) yyvsp[0].tree);
-	            }
-break;
-case 19:
-#line 138 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
-{
 	                yyval.tree = new SelectTbStmt(&yyvsp[-4].tree->columnList, &yyvsp[-2].tree->tableList, (WhereClause*) yyvsp[0].tree);
 	            }
 break;
-case 20:
-#line 144 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+case 19:
+#line 140 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new CreateIdxStmt((Table*) yyvsp[-3].tree, (Column*) yyvsp[-1].tree);
                 }
 break;
-case 21:
-#line 148 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+case 20:
+#line 144 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new DropIdxStmt((Table*) yyvsp[-3].tree, (Column*) yyvsp[-1].tree);
                 }
 break;
-case 22:
-#line 154 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+case 21:
+#line 150 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new Tree();
                     yyval.tree->fieldList.push_back((Field*) yyvsp[0].tree);
                 }
 break;
-case 23:
-#line 159 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+case 22:
+#line 155 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 		            yyval.tree = new Tree();
 		            yyval.tree->fieldList.insert(yyval.tree->fieldList.end(), yyvsp[-2].tree->fieldList.begin(), yyvsp[-2].tree->fieldList.end());
                     yyval.tree->fieldList.push_back((Field*) yyvsp[0].tree);
 		        }
 break;
+case 23:
+#line 163 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+{
+                    yyval.tree = new NormalField((Column*) yyvsp[-1].tree, (Type*) yyvsp[0].tree);
+                }
+break;
 case 24:
 #line 167 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-                    yyval.tree = new NormalField((Column*) yyvsp[-1].tree, (Type*) yyvsp[0].tree);
+                    yyval.tree = new NotNullField((Column*) yyvsp[-3].tree, (Type*) yyvsp[-2].tree);
                 }
 break;
 case 25:
 #line 171 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-                    yyval.tree = new NotNullField((Column*) yyvsp[-3].tree, (Type*) yyvsp[-2].tree);
-                }
+	                yyval.tree = new PrimaryField(&yyvsp[-1].tree->columnList);
+	            }
 break;
 case 26:
 #line 175 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-	                yyval.tree = new PrimaryField(&yyvsp[-1].tree->columnList);
-	            }
-break;
-case 27:
-#line 179 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
-{
 	                yyval.tree = new ForeignField((Column*) yyvsp[-6].tree, (Table*) yyvsp[-3].tree, (Column*) yyvsp[-1].tree);
 	            }
 break;
-case 28:
-#line 186 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+case 27:
+#line 182 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new IntType(yyvsp[-1].intVal);
                 }
 break;
+case 28:
+#line 186 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+{
+	                yyval.tree = new VarcharType(yyvsp[-1].intVal);
+	            }
+break;
 case 29:
 #line 190 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-	                yyval.tree = new VarcharType(yyvsp[-1].intVal);
+	                yyval.tree = new CharType(yyvsp[-1].intVal);
 	            }
 break;
 case 30:
 #line 194 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-	                yyval.tree = new CharType(yyvsp[-1].intVal);
+	                yyval.tree = new TimeType();
 	            }
 break;
 case 31:
 #line 198 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-	                yyval.tree = new TimeType();
-	            }
-break;
-case 32:
-#line 202 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
-{
 	                yyval.tree = new DoubleType();
 	            }
 break;
-case 33:
-#line 208 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+case 32:
+#line 204 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new NormalWhereClause((TabledColumn*) yyvsp[-2].tree, (Op*) yyvsp[-1].opVal, (Expr*) yyvsp[0].tree);
                 }
 break;
+case 33:
+#line 208 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+{
+			        yyval.tree = new IsNullWhereClause((TabledColumn*) yyvsp[-2].tree, false);
+			    }
+break;
 case 34:
 #line 212 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-			        yyval.tree = new IsNullWhereClause((TabledColumn*) yyvsp[-2].tree, false);
+			        yyval.tree = new IsNullWhereClause((TabledColumn*) yyvsp[-3].tree, true);
 			    }
 break;
 case 35:
 #line 216 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-			        yyval.tree = new IsNullWhereClause((TabledColumn*) yyvsp[-3].tree, true);
+			        yyval.tree = new AndWhereClause((WhereClause*) yyvsp[-2].tree, (WhereClause*) yyvsp[0].tree);
 			    }
 break;
 case 36:
-#line 220 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 222 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-			        yyval.tree = new AndWhereClause((WhereClause*) yyvsp[-2].tree, (WhereClause*) yyvsp[0].tree);
-			    }
+                    yyval.opVal = new Op(Tree::OP_EQ);
+                }
 break;
 case 37:
 #line 226 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-                    yyval.opVal = new Op(Tree::OP_EQ);
+                    yyval.opVal = new Op(Tree::OP_NE);
                 }
 break;
 case 38:
 #line 230 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-                    yyval.opVal = new Op(Tree::OP_NE);
+                    yyval.opVal = new Op(Tree::OP_LT);
                 }
 break;
 case 39:
 #line 234 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-                    yyval.opVal = new Op(Tree::OP_LT);
+                    yyval.opVal = new Op(Tree::OP_LE);
                 }
 break;
 case 40:
 #line 238 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-                    yyval.opVal = new Op(Tree::OP_LE);
+                    yyval.opVal = new Op(Tree::OP_GT);
                 }
 break;
 case 41:
 #line 242 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-                    yyval.opVal = new Op(Tree::OP_GT);
+                    yyval.opVal = new Op(Tree::OP_GE);
                 }
 break;
 case 42:
-#line 246 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 248 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-                    yyval.opVal = new Op(Tree::OP_GE);
+                    yyval.tree = new ValueExpr((Value*) yyvsp[0].tree);
                 }
 break;
 case 43:
 #line 252 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-                    yyval.tree = new ValueExpr((Value*) yyvsp[0].tree);
-                }
-break;
-case 44:
-#line 256 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
-{
 	                yyval.tree = new ColExpr((Column*) yyvsp[0].tree);
 	            }
 break;
-case 45:
-#line 262 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+case 44:
+#line 258 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     std::list<SingleSetClause*> singleList;
                     singleList.push_back((SingleSetClause*) yyvsp[0].tree);
                     yyval.tree = new SetClause(&singleList);
                 }
 break;
-case 46:
-#line 268 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+case 45:
+#line 264 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 		            std::list<SingleSetClause*>* beforeList = ((SetClause*) yyvsp[-2].tree)->getSetClauseList();
 		            std::list<SingleSetClause*> singleList;
@@ -804,164 +792,164 @@ case 46:
 		            yyval.tree = new SetClause(&singleList);
 		        }
 break;
-case 47:
-#line 278 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+case 46:
+#line 274 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new SingleSetClause((Column*) yyvsp[-2].tree, (Value*) yyvsp[0].tree);
+                }
+break;
+case 47:
+#line 279 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+{
+                    /* Tree.columnList 是空的*/
                 }
 break;
 case 48:
 #line 283 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-                    /* Tree.columnList 是空的*/
-                }
-break;
-case 49:
-#line 287 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
-{
 		            yyval.tree = new Tree();
 		            yyval.tree->columnList = yyvsp[0].tree->columnList;
 		        }
 break;
-case 50:
-#line 294 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+case 49:
+#line 290 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new Tree();
                     yyval.tree->tableList.push_back((Table*) yyvsp[0].tree);
                 }
 break;
-case 51:
-#line 299 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+case 50:
+#line 295 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 		            yyval.tree = new Tree();
 		            yyval.tree->tableList.insert(yyval.tree->tableList.end(), yyvsp[-2].tree->tableList.begin(), yyvsp[-2].tree->tableList.end());
 		            yyval.tree->tableList.push_back((Table*) yyvsp[0].tree);
 		        }
 break;
-case 52:
-#line 307 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+case 51:
+#line 303 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new Tree();
                     yyval.tree->columnList.push_back((Column*) yyvsp[0].tree);
                 }
 break;
-case 53:
-#line 312 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+case 52:
+#line 308 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 		            yyval.tree = new Tree();
 		            yyval.tree->columnList.insert(yyval.tree->columnList.end(), yyvsp[-2].tree->columnList.begin(), yyvsp[-2].tree->columnList.end());
 		            yyval.tree->columnList.push_back((Column*) yyvsp[0].tree);
 		        }
 break;
-case 54:
-#line 320 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+case 53:
+#line 316 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new Database(yyvsp[0].identVal);
                 }
 break;
-case 55:
-#line 325 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+case 54:
+#line 321 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new Table(yyvsp[0].identVal);
                 }
 break;
-case 56:
-#line 331 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+case 55:
+#line 327 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new Column(yyvsp[0].identVal);
+                }
+break;
+case 56:
+#line 334 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+{
+                    yyval.tree = new TabledColumn((Column*) yyvsp[0].tree);
                 }
 break;
 case 57:
 #line 338 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-                    yyval.tree = new TabledColumn((Column*) yyvsp[0].tree);
-                }
-break;
-case 58:
-#line 342 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
-{
                     yyval.tree = new TabledColumn((Table*) yyvsp[-2].tree, (Column*) yyvsp[0].tree);
                 }
 break;
-case 59:
-#line 348 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+case 58:
+#line 344 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new Tree();
                     yyval.tree->valueLists.push_back(yyvsp[-1].tree->valueList);
                 }
 break;
-case 60:
-#line 353 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+case 59:
+#line 349 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
 		            yyval.tree = new Tree();
                     yyval.tree->valueLists.insert(yyval.tree->valueLists.end(), yyvsp[-2].tree->valueLists.begin(), yyvsp[-2].tree->valueLists.end());
                     yyval.tree->valueLists.push_back(yyvsp[0].tree->valueList);
 		        }
 break;
-case 61:
-#line 361 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+case 60:
+#line 357 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new Tree();
                     yyval.tree->valueList.push_back((Value*) yyvsp[0].tree);
                 }
 break;
-case 62:
-#line 366 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+case 61:
+#line 362 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.tree = new Tree();
                     yyval.tree->valueList.insert(yyval.tree->valueList.end(), yyvsp[-2].tree->valueList.begin(), yyvsp[-2].tree->valueList.end());
                     yyval.tree->valueList.push_back((Value*) yyvsp[0].tree);
                 }
 break;
+case 62:
+#line 370 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+{
+                    yyval.tree = new IntValue(yyvsp[0].intVal);
+                }
+break;
 case 63:
 #line 374 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-                    yyval.tree = new IntValue(yyvsp[0].intVal);
+                    yyval.tree = new StringValue(yyvsp[0].stringVal);
                 }
 break;
 case 64:
 #line 378 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-                    yyval.tree = new StringValue(yyvsp[0].stringVal);
-                }
+	                yyval.tree = new NullValue();
+	            }
 break;
 case 65:
 #line 382 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-	                yyval.tree = new NullValue();
+	                yyval.tree = new DoubleValue(yyvsp[0].doubleVal);
 	            }
 break;
 case 66:
 #line 386 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
-	                yyval.tree = new DoubleValue(yyvsp[0].doubleVal);
-	            }
-break;
-case 67:
-#line 390 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
-{
 	                yyval.tree = new TimeValue(yyvsp[0].timeVal);
 	            }
 break;
+case 67:
+#line 392 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+{
+                    yyval.identVal = new Identifier(yyvsp[0].stringVal);
+                }
+break;
 case 68:
-#line 396 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 397 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.identVal = new Identifier(yyvsp[0].stringVal);
                 }
 break;
 case 69:
-#line 401 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
+#line 402 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
 {
                     yyval.identVal = new Identifier(yyvsp[0].stringVal);
                 }
 break;
-case 70:
-#line 406 "C:/Users/lenovo/Documents/GitHub/db/smql/parser.y"
-{
-                    yyval.identVal = new Identifier(yyvsp[0].stringVal);
-                }
-break;
-#line 965 "y.tab.c"
+#line 953 "y.tab.c"
     }
     yyssp -= yym;
     yystate = *yyssp;
